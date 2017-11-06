@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="img/Globe-icon.png">
+<title>Geo Test</title>
+	<style>
+		.body-night {
+			font-size: 100%;
+			background-color: #000000;
+			color: #990000;
+		}
+
+		.body-day {
+			font-size: 100%;
+		}
+		.main-display-day {
+			font-size: 5em;
+			color: blue;
+		}
+		.main-display-night {
+			font-size: 5em;
+			color: #990000;
+		}
+
+		table {
+			width: 100%;
+		}
+		td {
+			text-align: center;
+		}
+	</style>
+</head>
+<body class='body-day'>
+<h1>
+<table>
+	<tr>
+		<td><input type="checkbox">90 km/h</input></td>
+		<td><input type="checkbox">&#2641;</input></td>
+		<td>&#9757; 2100 m</td>
+		<td>101 km/h</td>
+		<td>03</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox">60 km/h</input></td>
+		<td colspan="3" rowspan="3" align="center" class="main-display-day" id="mainDisplay">0 km/h</td>
+		<td rowspan="3">&#128190;</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox">50 km/h</input></td>
+	</tr>
+	<tr>
+		<td><input type="checkbox">40 km/h</input></td>
+	</tr>
+	<tr>
+		<td><div id="sound" onselectstart="return false;">&#9835;</div></td>
+		<td><div id="mode" onselectstart="return false;">&#9789;</div></td>
+		<td>&#9759; 1049 m</td>
+		<td>113 km</td>
+		<td>03</td>
+	</tr>
+</table>
+</h1>
+</body>
+<script>
+        document.getElementById('mode').onclick = function() {
+                if(this.innerText == "\u2600") {
+                        this.innerText = "\u263D";
+			document.body.className = "body-day";
+			document.getElementById("mainDisplay").className = "main-display-day";
+                } else {
+                        this.innerText = "\u2600";
+			document.body.className = "body-night";
+			document.getElementById("mainDisplay").className = "main-display-night";
+                }
+        }
+        document.getElementById('sound').onclick = function() {
+                if(this.innerText == "\u2669") {
+                        this.innerText = "\u266B";
+//			document.body.className = "body-day";
+//			document.getElementById("mainDisplay").className = "main-display-day";
+                } else {
+                        this.innerText = "\u2669";
+//			document.body.className = "body-night";
+//			document.getElementById("mainDisplay").className = "main-display-night";
+                }
+        }
+</script>
+</html>
