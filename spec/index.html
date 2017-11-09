@@ -35,6 +35,7 @@
 <li>Data block may contain several commands and data, commands may be chained in more complex action</li>
 <li><p>The reponse is encrypted with same session key</p></li>
 </ul>
+<img src=fig1.png>
 <h2 id="protocol-layers">Protocol Layers</h2>
 <pre><code>+------------------+
 |  COMMAND LAYER   |
@@ -69,12 +70,14 @@
 +-----------------------------+
 |  DATA (ENCRYPTED)           |
 +-----------------------------+</code></pre></li>
+<img src=fig2.png>
 <li><p>Response</p>
 <pre><code>+-----------------------+
 | ERROR CODE            |
 +-----------------------+
 | EXTRA DATA (optional) |
 +-----------------------+</code></pre>
+<img src=fig3.png>
 <h3>Secure Data Exchange Protocol</h3></li>
 </ul>
 <ol style="list-style-type: decimal">
