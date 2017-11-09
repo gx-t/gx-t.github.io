@@ -1,0 +1,114 @@
+<html>
+<body>
+<h3 id="overview">Overview</h3>
+<ul>
+<li><p>Boards are conneted in homomorph hierarchy using proprietary protocol over UDP</p>
+<pre><code>                                          +--------+
+                                          | Server |
+                                          ++-----+-+
+                                           |     |
+                                           |   . |
+                                           |     |
+                              +------------+   . +--------------+
+                              |                                 |
+                              |                .                |
+                              |                                 |
+                              |                                 |
+                         +----+-----+                      +----+-----+
+                         |Boad 0|1|0|      .    .    .     |Boad 0|1|k|
+                         +-+--+--+--+                      +----------+
+                           |  |  |                                |
+      +--------------------+  |  +-------+                        |
+      |                 +-----+          |                        +-----------+
+      |                 |                |                                    |
++-----+----+      +-----+----+     +-----+----+                          +----+-----+
+|Boad 0|0|1|      |Boad 0|0|2|     |Boad 0|0|3|         .    .    .      |Boad 0|0|n|
++----------+      +----------+     +----------+                          +----------+</code></pre></li>
+<li>All connections are permanent, bidirectional</li>
+<li>Protocol is based on encrypted structured binary data exchange</li>
+<li>All data exchange is secure, encrypted, using one time session key</li>
+<li>Connection is initiated by client board</li>
+<li>Each board is server and client at the same time and can take the role of a node between levels</li>
+<li>Each board has fixed number (256) of server processes and single client process</li>
+<li>Each data block consists of command and following data</li>
+<li>Command list is extendable</li>
+<li>Data block may contain several commands and data, commands may be chained in more complex action</li>
+<li><p>The reponse is encrypted with same session key</p></li>
+</ul>
+<h2 id="protocol-layers">Protocol Layers</h2>
+<pre><code>+------------------+
+|  COMMAND LAYER   |
++------------------+
+|  SECURITY LAYER  |
++------------------+
+|  UDP             |
++------------------+</code></pre>
+<h3 id="command-layer">Command Layer</h3>
+<pre><code>+--------------------+
+| OP CODE (Command)  |
++--------------------+
+| DATA               |
++--------------------+
+| ...                |
+| ...                |
+| ...                |
++--------------------+
+| OP CODE (Command)  |
++--------------------+
+| DATA               |
++--------------------+</code></pre>
+<h3 id="security-layer">Security Layer</h3>
+<ul>
+<li><p>Request</p>
+<pre><code>+-----------------------------+
+|  KEY ID                     |
++-----------------------------+
+|  RANDOM DIVERSIFIER         |
++-----------------------------+
+|  DATA HASH (ECRYPTED)       |
++-----------------------------+
+|  DATA (ENCRYPTED)           |
++-----------------------------+</code></pre></li>
+<li><p>Response</p>
+<pre><code>+-----------------------+
+| ERROR CODE            |
++-----------------------+
+| EXTRA DATA (optional) |
++-----------------------+</code></pre>
+<h3>Secure Data Exchange Protocol</h3></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Client randomly selects key from key DB.</li>
+<li>Client generates 32 bytes length random diversifier.</li>
+<li>Client generates 32 bytes length session key based on selected key and diversifier.</li>
+<li>Client calculates sha256 hash on payload to be sent.</li>
+<li>Client encrypts payload using session key.</li>
+<li>Client encrypts calculated hash.</li>
+<li>Client sends 1 byte length key id, 32 bytes length diversifier, encrypted data and encrypted hash.</li>
+<li>Server reads key id and selects key from key DB.</li>
+<li>Server reads 32 bytes length diversifier.</li>
+<li>Server generates session key based on selected key and diersifier.</li>
+<li>Server decrypts data using session key.</li>
+<li>Server calculates sha256 hash on decrypted data.</li>
+<li>Server decrypts received hash.</li>
+<li>Server compares calculated hash with decrypted one</li>
+<li>Server sends response code</li>
+</ol>
+<h3 id="board-key-table">Board Key Table</h3>
+<p>Every board and server has sqlite database with preinstalled key table of 32 bytes (256 bits) length AES keys identified by 1 byte key id.</p>
+<h2 id="board-structure">Board structure</h2>
+<p>Board may have several sensor or servo chips on it. Board also may transparently retransmit the information received from other boards.</p>
+<h3 id="sensorservo-chips">Sensor/servo chips</h3>
+<ul>
+<li>Different type of chips may be connected to board using standard protocols: I2C, SPI, 1-Wire.</li>
+<li>Each chip has configuration text file with protocol specific information (address, etc).</li>
+<li>&quot;Driver&quot; part of the software analyzes all found configuration files and initialzes sensors/servos.</li>
+<li>&quot;Driver&quot; scans all sensor chips and detects measured value changes, error cases and sends to collector.</li>
+<li>Server processes receive information from other boards and send to collector appending own path to received data path.</li>
+<li>Collector periodically sends collected information to upped level server using network client.</li>
+<li>To avoid colissions between sensor scanning and servo command processes, flock synchronization is used for each device file (/dev/i2c-0, etc.)</li>
+</ul>
+<h3 id="data-collector">Data collector</h3>
+<h3 id="network-agent">Network agent</h3>
+</body>
+</html>
