@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Անելիքներ</title>
+<script>
+
+    function empty_false() { return false; }
+
+    function set_normal()
+    {
+        this.state = 0;
+        this.onclick = set_important;
+        this.oncontextmenu = edit_item;
+        this.innerHTML = this.innerText.normalize();
+    }
+    
+    function set_important()
+    {
+        this.state = 1;
+        this.onclick = set_inprogress;
+        this.oncontextmenu = edit_item;
+        this.innerHTML = this.innerText.bold();
+    }
+
+    function set_inprogress()
+    {
+        this.state = 2;
+        this.onclick = set_completed;
+        this.oncontextmenu = edit_item;
+        this.innerHTML = this.innerText.italics();
+    }
+
+    function set_completed()
+    {
+        this.state = 3;
+        this.onclick = set_normal;
+        this.oncontextmenu = delete_item;
+        this.innerHTML = this.innerText.strike();
+    }
+
+    function edit_item()
+    {
+        console.log("edit_item");
+        return false;
+    }
+
+    function delete_item()
+    {
+        console.log("delete_item");
+        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText)) {
+            this.remove();
+        }
+        return false;
+    }
+
+    var add_item = function()
+    {
+        var item = document.createElement("li");
+        item.state          = 0;
+        item.innerText      = "<Նոր անելիք>";
+        item.style          = "cursor:default";
+        item.onselectstart  = empty_false;
+        item.onclick        = set_important;
+        item.oncontextmenu  = edit_item;
+        sp.appendChild(item);
+    }
+</script>
+</head>
+<body>
+<h3>Անելիքներ</h3>
+    <div id="sp">
+    </div>
+    <hr>
+    <a href='javascript:add_item();'>Ավելացնել նորը</a>
+</body>
+</html>
