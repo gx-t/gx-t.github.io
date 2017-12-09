@@ -19,19 +19,23 @@
             var o = {t: arr[i].innerText, s: arr[i].state};
             todo_data[i] = o;
         }
-        console.log(JSON.stringify(todo_data));
+        localStorage.todo_data = JSON.stringify(todo_data);
     }
 
     function load_items() {
+        if(!localStorage || !localStorage.todo_data)
+            return;
+
+        var arr = JSON.parse(localStorage.todo_data);
+        arr.forEach(function(el) { var item = add_item(el.t, el.s); });
     }
 
     uni_input.onblur = function() {
         if(0 < uni_input.value.length) {
             uni_item.innerText = uni_input.value;
-            update_state(uni_item);
         }
         uni_input.replaceWith(uni_item);
-        setTimeout(function() { uni_item = null; }, 500);
+        setTimeout(function() { update_state(uni_item); uni_item = null; }, 500);
         return false;
     }
 
@@ -85,6 +89,7 @@
         if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText)) {
             this.remove();
         }
+        save_items();
         return false;
     }
 
@@ -96,15 +101,15 @@
         update_state(this);
     }
 
-    var add_item = function() {
+    var add_item = function(text, state) {
         var item = document.createElement("li");
-        item.innerText      = "<Նոր անելիք>";
+        item.innerText      = text;
         item.style          = "cursor:default";
         item.onselectstart  = function() { return false; };
         item.onclick        = onclick;
-        item.state          = 0;
-        update_state(item);
+        item.state          = state;
         sp.appendChild(item);
+        update_state(item);
     }
 
     window.onload = function() {
@@ -117,6 +122,6 @@
     <div id="sp">
     </div>
     <hr>
-    <a href='javascript:add_item();'><img src=img/new-item.svg width=32 height=32></a>
+    <a href='javascript:add_item("<Նոր անելիք>", 0);'><img src=img/new-item.svg width=32 height=32></a>
 </body>
 </html>
