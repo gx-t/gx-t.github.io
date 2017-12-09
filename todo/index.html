@@ -8,65 +8,49 @@
 <script>
 
     var uni_input = document.createElement('input');
-    uni_input.onblur = function()
-    {
+    var uni_item  = null;
+
+    uni_input.onblur = function() {
         if(0 < uni_input.value.length) {
             uni_item.innerText = uni_input.value;
             update_state(uni_item);
         }
         uni_input.replaceWith(uni_item);
+        setTimeout(function() { uni_item = null; }, 500);
         return false;
     }
-    var uni_item = null;
 
-    function empty_false() { return false; }
+    var state_proc_arr = [
+        function() {
+            this.oncontextmenu = edit_item;
+            this.innerHTML = this.innerText.normalize();
+        },
 
-    function set_normal()
-    {
-        this.state = 0;
-        this.onclick = set_important;
-        this.oncontextmenu = edit_item;
-        this.innerHTML = this.innerText.normalize();
-    }
-    
-    function set_important()
-    {
-        this.state = 1;
-        this.onclick = set_inprogress;
-        this.oncontextmenu = edit_item;
-        this.innerHTML = this.innerText.bold();
-    }
+        function() {
+            this.oncontextmenu = edit_item;
+            this.innerHTML = this.innerText.bold();
+        },
 
-    function set_inprogress()
-    {
-        this.state = 2;
-        this.onclick = set_completed;
-        this.oncontextmenu = edit_item;
-        this.innerHTML = this.innerText.italics();
-    }
+        function set_inprogress() {
+            this.oncontextmenu = edit_item;
+            this.innerHTML = this.innerText.italics();
+        },
 
-    function set_completed()
-    {
-        this.state = 3;
-        this.onclick = set_normal;
-        this.oncontextmenu = delete_item;
-        this.innerHTML = this.innerText.strike();
-    }
+        function() {
+            this.oncontextmenu = delete_item;
+            this.innerHTML = this.innerText.strike();
+        }
+    ];
 
-    function update_state(item)
-    {
-        var state_proc_arr = [
-            set_normal,
-            set_important,
-            set_inprogress,
-            set_completed
-        ];
+    function update_state(item) {
+        item.state %= state_proc_arr.length;
         state_proc_arr[item.state].call(item);
     }
 
-    function edit_item()
-    {
-        console.log("edit_item");
+    function edit_item() {
+        if(uni_item)
+            return;
+
         uni_item = this;
         uni_input.value = this.innerText;
         this.replaceWith(uni_input);
@@ -75,22 +59,29 @@
         return false;
     }
 
-    function delete_item()
-    {
-        console.log("delete_item");
+    function delete_item() {
         if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText)) {
             this.remove();
         }
         return false;
     }
 
-    var add_item = function()
-    {
+    function onclick() {
+        if(uni_item)
+            return;
+
+        this.state ++;
+        update_state(this);
+    }
+
+    var add_item = function() {
         var item = document.createElement("li");
         item.innerText      = "<Նոր անելիք>";
         item.style          = "cursor:default";
-        item.onselectstart  = empty_false;
-        set_normal.call(item);
+        item.onselectstart  = function() { return false; };
+        item.onclick        = onclick;
+        item.state          = 0;
+        update_state(item);
         sp.appendChild(item);
     }
 </script>
