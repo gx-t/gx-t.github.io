@@ -20,6 +20,12 @@
         return false;
     }
 
+    uni_input.onkeydown = function(evt) {
+        if(evt.keyCode != 13)
+            return;
+        uni_input.blur();
+    }
+
     var state_proc_arr = [
         function() {
             this.oncontextmenu = edit_item;
