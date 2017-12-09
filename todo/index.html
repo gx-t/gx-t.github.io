@@ -7,6 +7,18 @@
 <title>Անելիքներ</title>
 <script>
 
+    var uni_input = document.createElement('input');
+    uni_input.onblur = function()
+    {
+        if(0 < uni_input.value.length) {
+            uni_item.innerText = uni_input.value;
+            update_state(uni_item);
+        }
+        uni_input.replaceWith(uni_item);
+        return false;
+    }
+    var uni_item = null;
+
     function empty_false() { return false; }
 
     function set_normal()
@@ -41,9 +53,25 @@
         this.innerHTML = this.innerText.strike();
     }
 
+    function update_state(item)
+    {
+        var state_proc_arr = [
+            set_normal,
+            set_important,
+            set_inprogress,
+            set_completed
+        ];
+        state_proc_arr[item.state].call(item);
+    }
+
     function edit_item()
     {
         console.log("edit_item");
+        uni_item = this;
+        uni_input.value = this.innerText;
+        this.replaceWith(uni_input);
+        uni_input.focus();
+
         return false;
     }
 
@@ -59,12 +87,10 @@
     var add_item = function()
     {
         var item = document.createElement("li");
-        item.state          = 0;
         item.innerText      = "<Նոր անելիք>";
         item.style          = "cursor:default";
         item.onselectstart  = empty_false;
-        item.onclick        = set_important;
-        item.oncontextmenu  = edit_item;
+        set_normal.call(item);
         sp.appendChild(item);
     }
 </script>
