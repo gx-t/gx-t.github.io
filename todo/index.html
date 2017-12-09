@@ -10,6 +10,21 @@
     var uni_input = document.createElement('input');
     var uni_item  = null;
 
+    function save_items() {
+        var arr = document.getElementsByTagName("li");
+        var todo_data = [];
+        todo_data.length = arr.length;
+        todo_data.fill();
+        for(var i = 0; i < arr.length; i ++) {
+            var o = {t: arr[i].innerText, s: arr[i].state};
+            todo_data[i] = o;
+        }
+        console.log(JSON.stringify(todo_data));
+    }
+
+    function load_items() {
+    }
+
     uni_input.onblur = function() {
         if(0 < uni_input.value.length) {
             uni_item.innerText = uni_input.value;
@@ -51,6 +66,7 @@
     function update_state(item) {
         item.state %= state_proc_arr.length;
         state_proc_arr[item.state].call(item);
+        save_items();
     }
 
     function edit_item() {
@@ -90,6 +106,10 @@
         update_state(item);
         sp.appendChild(item);
     }
+
+    window.onload = function() {
+        load_items();
+    }
 </script>
 </head>
 <body>
@@ -97,6 +117,6 @@
     <div id="sp">
     </div>
     <hr>
-    <a href='javascript:add_item();'>Ավելացնել նորը</a>
+    <a href='javascript:add_item();'><img src=img/new-item.svg width=32 height=32></a>
 </body>
 </html>
