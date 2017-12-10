@@ -1,10 +1,10 @@
 CACHE MANIFEST
 
 CACHE:
-/index.html
-/img/check.png
-/img/new.png
-/img/edit.png
-/img/trash.png
+/todo/index.html
+/todo/img/check.png
+/todo/img/new.png
+/todo/img/edit.png
+/todo/img/trash.png
 
-Sun Dec 10 16:36:14 +04 2017
+Sun Dec 10 22:52:14 +04 2017
