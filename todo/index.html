@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="img/check.svg">
 <title>Անելիքներ</title>
 <script>
 
@@ -35,7 +36,7 @@
             uni_item.innerText = uni_input.value;
         }
         uni_input.replaceWith(uni_item);
-        setTimeout(function() { update_state(uni_item); uni_item = null; }, 500);
+        setTimeout(function() { update_state(uni_item); uni_item = null; set_mode_check();}, 100);
         return false;
     }
 
@@ -47,22 +48,18 @@
 
     var state_proc_arr = [
         function() {
-            this.oncontextmenu = edit_item;
             this.innerHTML = this.innerText.normalize();
         },
 
         function() {
-            this.oncontextmenu = edit_item;
             this.innerHTML = this.innerText.bold();
         },
 
         function set_inprogress() {
-            this.oncontextmenu = edit_item;
             this.innerHTML = this.innerText.italics();
         },
 
         function() {
-            this.oncontextmenu = delete_item;
             this.innerHTML = this.innerText.strike();
         }
     ];
@@ -71,34 +68,6 @@
         item.state %= state_proc_arr.length;
         state_proc_arr[item.state].call(item);
         save_items();
-    }
-
-    function edit_item() {
-        if(uni_item)
-            return;
-
-        uni_item = this;
-        uni_input.value = this.innerText;
-        this.replaceWith(uni_input);
-        uni_input.focus();
-
-        return false;
-    }
-
-    function delete_item() {
-        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText)) {
-            this.remove();
-        }
-        save_items();
-        return false;
-    }
-
-    function onclick() {
-        if(uni_item)
-            return;
-
-        this.state ++;
-        update_state(this);
     }
 
     var add_item = function(text, state) {
@@ -111,9 +80,79 @@
         sp.appendChild(item);
         update_state(item);
     }
+    
+    function mode_check_onclick() {
+        if(uni_item)
+            return;
+
+        this.state ++;
+        update_state(this);
+    }
+
+    function mode_new_onclick() {}
+
+    function mode_edit_onclick() {
+        if(uni_item)
+            return;
+
+        uni_item = this;
+        uni_input.value = this.innerText;
+        this.replaceWith(uni_input);
+        uni_input.focus();
+    }
+
+    function mode_delete_onclick() {
+        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText)) {
+            this.remove();
+        }
+        save_items();
+        set_mode_check();
+    }
+
+    function set_items_onclick(handler) {
+        var arr = document.getElementsByTagName("li");
+        for(var i = 0; i < arr.length; i ++) {
+            arr[i].onclick = handler;
+        }
+    }
+
+    function set_mode_check() {
+        id_check.border     = 1;
+        id_new.border       = 0;
+        id_edit.border      = 0;
+        id_delete.border    = 0;
+        set_items_onclick(mode_check_onclick);
+    }
+
+    function set_mode_new() {
+        id_check.border     = 0;
+        id_new.border       = 1;
+        id_edit.border      = 0;
+        id_delete.border    = 0;
+        set_items_onclick(mode_new_onclick);
+        add_item("«նոր անելիք»", 0);
+        set_mode_check();
+    }
+
+    function set_mode_edit() {
+        id_check.border     = 0;
+        id_new.border       = 0;
+        id_edit.border      = 1;
+        id_delete.border    = 0;
+        set_items_onclick(mode_edit_onclick);
+    }
+
+    function set_mode_delete() {
+        id_check.border     = 0;
+        id_new.border       = 0;
+        id_edit.border      = 0;
+        id_delete.border    = 1;
+        set_items_onclick(mode_delete_onclick);
+    }
 
     window.onload = function() {
         load_items();
+        set_mode_check();
     }
 </script>
 </head>
@@ -122,6 +161,9 @@
     <div id="sp">
     </div>
     <hr>
-    <a href='javascript:add_item("<Նոր անելիք>", 0);'><img src=img/new-item.svg width=32 height=32></a>
+    <a href='javascript:set_mode_check();'  ><img src=img/check.svg width=32 height=32 id="id_check"    ></a>
+    <a href='javascript:set_mode_new();'    ><img src=img/new.svg width=32 height=32i id="id_new"       ></a>
+    <a href='javascript:set_mode_edit();'   ><img src=img/edit.svg width=32 height=32 id="id_edit"      ></a>
+    <a href='javascript:set_mode_delete();' ><img src=img/trash.svg width=32 height=32 id="id_delete"   ></a>
 </body>
 </html>
