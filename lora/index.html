@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>SX127x Calculator</title>
+</head>
+<body>
+  <table>
+    <tr><td colspan='3' align='center'><h3><u>SX1276/77/78/79</u></h3></td></tr>
+    <tr>
+      <td><b>0x01:</b><input id='reg0x01' size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>Low Frequency Mode</td>
+      <td><input type="checkbox" id='lf' checked></input></td>
+    </tr>
+    <tr>
+      <td>Mode</td>
+      <td>
+        <select id='mode'>
+            <option value='0'>SLEEP</option>
+            <option value='1'>STDBY</option>
+            <option value='2'>Frequency synthesis TX (FSTX)</option>
+            <option value='3'>Transmit (TX)</option>
+            <option value='4'>Frequency synthesis RX (FSRX)</option>
+            <option value='5' selected>Receive continuous (RXCONTINUOUS)</option>
+            <option value='6'>Receive single (RXSINGLE)</option>
+            <option value='7'>Channel activity detection (CAD)</option>
+        </select>
+      </td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x06:</b><input id="reg0x06" size=2 maxlength=2></input><br>
+      <b>0x07:</b><input id="reg0x07" size=2 maxlength=2></input><br>
+      <b>0x08:</b><input id="reg0x08" size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>Centre Frequency</td>
+      <td><input type='number' id='hz' value=433920000 min=137000000 max=1020000000 step='1e6'></input></td>
+      <td>Hz</td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x1D:</b><input id='reg0x1D' size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>Bandwidth</td>
+      <td>
+        <select id='bw'>
+            <option value='9'>500</option>
+            <option value='8'>250</option>
+            <option value='7'>125</option>
+            <option value='6'>62,5</option>
+            <option value='5'>41.7</option>
+            <option value='4'>31.25</option>
+            <option value='3'>20.8</option>
+            <option value='2' selected>15.6</option>
+            <option value='1'>10.4</option>
+            <option value='0'>7.8</option>
+        </select>
+      </td>
+      <td>kHz</td>
+    </tr>
+    <tr>
+      <td>Coding Rate</td>
+      <td>
+        <select id='cr'>
+            <option value=4>4</option>
+            <option value=3>3</option>
+            <option value=2>2</option>
+            <option value=1 selected>1</option>
+        </select>
+      </td>
+      <td>4/CR+4</td>
+    </tr>
+    <tr>
+      <td>Header Mode</td>
+      <td><input type="checkbox" id='hm'>Explicit Header Enabled</input></td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x1E:</b><input id='reg0x1E' size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>Spreading Factor</td>
+      <td>
+        <select id='sf'>
+            <option value=12 selected>12</option>
+            <option value=11>11</option>
+            <option value=10>10</option>
+            <option value=9>9</option>
+            <option value=8>8</option>
+            <option value=7>7</option>
+            <option value=6>6</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>CRC Enabled</td>
+      <td><input type="checkbox" id='crc' checked>Enabled</input></td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x20:</b><input id="reg0x20" size=2 maxlength=2></input><br>
+      <b>0x21:</b><input id="reg0x21" size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>Preamble Length</td>
+      <td><input type='number' id='pr' value=6 min=2 max=65535 step='1' maxlength=5></input></td>
+      <td>Symbols</td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x22:</b><input id="reg0x22" size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>Payload Length</td>
+      <td><input type='number' id='pl' value=1 min=0 max=255 step=1></input></td>
+      <td>Bytes</td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x26:</b><input id="reg0x26" size=2 maxlength=2></input></td>
+    </tr>
+    <tr>
+      <td>AGC</td>
+      <td><input type="checkbox" id='agc' checked>AGC Loop On</input></td>
+    </tr>
+    <tr>
+      <td>Low Datarate</td>
+      <td><input type="checkbox" id='ld' checked>Optimizer On</input></td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr>
+      <td><b>0x39:</b><input id="reg0x39" size=2 maxlength=2 value=12></input></td>
+    </tr>
+    <tr>
+      <td>Synch Word</td>
+    </tr>
+    <tr><td colspan='3'><hr></td></tr>
+    <tr><td colspan='3'><pre id='blob'></pre></td></tr>
+  </table>
+  <hr>
+  <a href=https://www.semtech.com/uploads/documents/DS_SX1276-7-8-9_W_APP_V5.pdf>Datasheet</a><br>
+  <a href=https://www.semtech.com/uploads/documents/LoraDesignGuide_STD.pdf>Designer’s Guide(AN1200.13)</a><br>
+</body>
+<script>
+
+const ctrl = {
+    "reg0x01": document.getElementById("reg0x01")
+    , "reg0x06": document.getElementById("reg0x06")
+    , "reg0x07": document.getElementById("reg0x07")
+    , "reg0x08": document.getElementById("reg0x08")
+    , "reg0x1D": document.getElementById("reg0x1D")
+    , "reg0x1E": document.getElementById("reg0x1E")
+    , "reg0x20": document.getElementById("reg0x20")
+    , "reg0x21": document.getElementById("reg0x21")
+    , "reg0x22": document.getElementById("reg0x22")
+    , "reg0x26": document.getElementById("reg0x26")
+    , "reg0x39": document.getElementById("reg0x39")
+
+    , "lf": document.getElementById("lf")
+    , "mode": document.getElementById("mode")
+    , "hz": document.getElementById("hz")
+    , "bw": document.getElementById("bw")
+    , "cr": document.getElementById("cr")
+    , "hm": document.getElementById("hm")
+    , "sf": document.getElementById("sf")
+    , "crc": document.getElementById("crc")
+    , "pr": document.getElementById("pr")
+    , "pl": document.getElementById("pl")
+    , "agc": document.getElementById("agc")
+    , "ld": document.getElementById("ld")
+    , "blob": document.getElementById("blob")
+};
+
+ctrl.blob.calc = function() {}
+
+ctrl.reg0x01.__proto__.set_hex = function(val)
+{
+    this.value = val.toString(16);
+}
+
+ctrl.reg0x01.__proto__.get_hex = function()
+{
+    return parseInt(this.value, 16);
+}
+
+ctrl.reg0x01.__proto__.get_hex_c_str = function()
+{
+    return "0x" + this.value;
+}
+
+
+ctrl.reg0x01.__proto__.check_for_valid_2_digit_hex = function()
+{
+    this.style.color = /^[0-9a-fA-F]{1,2}$/i.test(this.value) ? "" : "red";
+}
+
+ctrl.lf.onchange = ctrl.mode.onchange = function()
+{
+    var reg_val = ctrl.mode.value;
+    reg_val |= 0b10000000;
+    reg_val |= (ctrl.lf.checked ? 0b1000 : 0);
+    ctrl.reg0x01.set_hex(reg_val);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x01.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    var val = this.get_hex();
+    ctrl.lf.checked = val & 0b1000;
+    ctrl.mode.value = val & 0b111;
+    ctrl.blob.calc();
+}
+
+ctrl.hz.oninput = function()
+{
+    var reg_val = this.value / 32e6 * (1 << 19);
+    ctrl.reg0x06.set_hex((reg_val & 0xFF0000) >> 16);
+    ctrl.reg0x07.set_hex((reg_val & 0xFF00) >> 8);
+    ctrl.reg0x08.set_hex(reg_val & 0xFF);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x06.oninput = ctrl.reg0x07.oninput = ctrl.reg0x08.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    var val = (ctrl.reg0x06.get_hex() << 16)
+    | (ctrl.reg0x07.get_hex() << 8)
+    | ctrl.reg0x08.get_hex();
+    ctrl.hz.value = val / (1 << 19) * 32e6;
+    ctrl.blob.calc();
+}
+
+ctrl.bw.onchange = ctrl.cr.onchange = ctrl.hm.onchange = function()
+{
+    var reg_val =
+    ctrl.bw.value << 4
+    | ctrl.cr.value << 1
+    | !ctrl.hm.checked;
+    ctrl.reg0x1D.set_hex(reg_val);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x1D.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    var val = this.get_hex();
+    ctrl.bw.value = val >> 4;
+    ctrl.cr.value = (val & 0x0E) >> 1;
+    ctrl.hm.checked = !(val & 0x01);
+    ctrl.blob.calc();
+}
+
+ctrl.sf.onchange = ctrl.crc.onchange = function()
+{
+    var reg_val = ctrl.sf.value << 4 | (ctrl.crc.checked ? 0b100 : 0);
+    ctrl.reg0x1E.set_hex(reg_val);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x1E.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    var val = this.get_hex();
+    ctrl.sf.value = val >> 4;
+    ctrl.crc.checked = val & 0b100;
+    ctrl.blob.calc();
+}
+
+ctrl.pr.oninput = function()
+{
+    var reg_val = this.value & 0xFFFF;
+    ctrl.reg0x20.set_hex(reg_val >> 8);
+    ctrl.reg0x21.set_hex(reg_val & 0xFF);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x20.oninput = ctrl.reg0x21.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    ctrl.pr.value = (ctrl.reg0x20.get_hex() << 8) + ctrl.reg0x21.get_hex();
+    ctrl.blob.calc();
+}
+
+ctrl.pl.oninput = function()
+{
+    var reg_val = this.value;
+    reg_val &= 0xFF;
+    ctrl.reg0x22.set_hex(reg_val);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x22.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    ctrl.pl.value = this.get_hex();
+    ctrl.blob.calc();
+}
+
+ctrl.agc.onchange = ctrl.ld.onchange = function()
+{
+    var reg_val = 0;
+    if(ctrl.agc.checked)
+        reg_val |= 0b00000100;
+    if(ctrl.ld.checked)
+        reg_val |= 0b00001000;
+    ctrl.reg0x26.set_hex(reg_val);
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x26.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    var val = this.get_hex();
+    ctrl.agc.checked = val & 0b00000100;
+    ctrl.ld.checked = val & 0b00001000;
+    ctrl.blob.calc();
+}
+
+ctrl.reg0x39.oninput = function()
+{
+    this.check_for_valid_2_digit_hex();
+    if("34" == this.value) {
+        this.style.color = "blue";
+    }
+    ctrl.blob.calc();
+}
+
+ctrl.mode.onchange();
+ctrl.hz.oninput();
+ctrl.bw.onchange();
+ctrl.sf.onchange();
+ctrl.pr.oninput();
+ctrl.pl.oninput();
+ctrl.agc.onchange();
+
+ctrl.mode.get_tx_power = function()
+{
+    if(3 == this.value)
+        return "  , 0x09, 0xff //Max TX Power\n";
+    return "";
+}
+
+ctrl.mode.get_lna_gain = function()
+{
+    if(5 == this.value || 6 == this.value)
+        return "  , 0x0C, 0b00100000 //LNA highest gain\n";
+    return "";
+}
+
+ctrl.mode.get_dio_mapping = function()
+{
+    if(3 == this.value)
+        return "  , 0x40, 0x40 //Map TX Done to DIO0\n";
+    if(5 == this.value || 6 == this.value)
+        return "  , 0x40, 0x00 //Map RX Done to DIO0\n";
+    return "";
+}
+
+ctrl.mode.get_pa_boost = function()
+{
+    if(3 == this.value)
+        return "  , 0x4D, 0x87 //PA Boost On\n";
+    return "";
+}
+
+ctrl.sf.get_detection_optimize = function()
+{
+    return "  , 0x31, 0xC"
+    + ("6" == this.value ? "5" : "3")
+    + (" //Data Detection Optimize for ")
+    + ("6" == this.value ? "6" : "7..12")
+    + "\n";
+}
+
+ctrl.sf.get_detection_threshold = function()
+{
+    return "  , 0x37, 0x0"
+    + ("6" == this.value ? "c" : "a")
+    + (" //Data Detection Threshold for ")
+    + ("6" == this.value ? "6" : "7..12")
+    + "\n";
+}
+
+ctrl.blob.calc = function()
+{
+    var bw = [7.8, 10.4, 15.6, 20.8, 31.25, 41.7, 62.5, 125, 250, 500][(ctrl.reg0x1D.get_hex() >> 4)];
+    var sf =  ctrl.reg0x1E.get_hex() >> 4;
+    var crc = !!(0x04 & ctrl.reg0x1E.get_hex());
+    var pr = 4.25 + ((ctrl.reg0x20.get_hex() << 8) | ctrl.reg0x21.get_hex());
+    var pl = ctrl.reg0x22.get_hex();
+    var de = !!(0x08 & ctrl.reg0x26.get_hex());
+    var h = 0x01 & ctrl.reg0x1D.get_hex();
+    var cr = (0x0E & ctrl.reg0x1D.get_hex()) >> 1;
+    var tsym = 2 ** sf / bw;
+
+    var tpr = pr * tsym;
+    var pl_sym_nb = 8 + Math.max(Math.ceil((8 * pl - 4 * sf + 28 + 16 * crc - 20 * h) / 4 / (sf - 2 * de)) * (cr + 4), 0);
+    var tpl = pl_sym_nb * tsym;
+
+    this.innerText =
+        "Total Preamble Length:\t" + pr + " Symbols\n"
+        + "Symbol Duration:\t" + tsym + " ms\n"
+        + "Preamble Duration:\t" + tpr + " ms\n"
+        + "Payload Symbol Count:\t" + pl_sym_nb + " Symbols\n"
+        + "Payload Duration:\t" + tpl + " ms\n"
+        + "Time On Air:\t\t" + (tpr + tpl) + " ms\n"
+        + "\n"
+        + "static uint8_t lora_init_blob[] = {\n"
+        + "  0x01, 0x88 //Sleep Mode\n"
+        + "  , 0x06, " + ctrl.reg0x06.get_hex_c_str() + " //MSB " + ctrl.hz.value + " Hz\n"
+        + "  , 0x07, " + ctrl.reg0x07.get_hex_c_str() + " //Mid.\n"
+        + "  , 0x08, " + ctrl.reg0x08.get_hex_c_str() + " //LSB\n"
+        + ctrl.mode.get_tx_power()
+        + "  , 0x0B, 0b00001011 //OCP off\n"
+        + ctrl.mode.get_lna_gain()
+        + "  , 0x0E, 0x00 //TX base address\n"
+        + "  , 0x0F, 0x00 //RX base address\n"
+        + "  , 0x1D, " + ctrl.reg0x1D.get_hex_c_str() + " //BW, CR, header mode\n"
+        + "  , 0x1E, " + ctrl.reg0x1E.get_hex_c_str() + " //SF, CRC\n"
+        + "  , 0x20, " + ctrl.reg0x20.get_hex_c_str() + " //Preamble len MSB\n"
+        + "  , 0x21, " + ctrl.reg0x21.get_hex_c_str() + " //Preamble len LSB\n"
+        + "  , 0x22, " + ctrl.reg0x22.get_hex_c_str() + " //Payload length = " + ctrl.pl.value + "\n"
+        + "  , 0x26, " + ctrl.reg0x26.get_hex_c_str() + " //Low Data Rate Optimize, AGC\n"
+        + ctrl.sf.get_detection_optimize()
+        + ctrl.sf.get_detection_threshold()
+        + "  , 0x39, " + ctrl.reg0x39.get_hex_c_str() + " //Synch Word\n"
+        + ctrl.mode.get_dio_mapping()
+        + ctrl.mode.get_pa_boost()
+        + "  , 0x01, " + ctrl.reg0x01.get_hex_c_str() + " //" + ctrl.mode.options[ctrl.mode.selectedIndex].text + "\n"
+        + "\n  , 0xFF, 0xFF //END\n"
+        + "};\n"
+}
+
+ctrl.blob.calc();
+
+</script>
+<script src="http://shah32768.sdf.org/cgi-bin/counter.cgi?lora"></script>
+</html>
