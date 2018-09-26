@@ -2,6 +2,7 @@
 <html lang='en'>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="icon" href="img/pencil.jpg">
 <title>SX127x Calculator</title>
 </head>
 <body>
@@ -177,23 +178,23 @@ const ctrl = {
 
 ctrl.blob.calc = function() {}
 
-ctrl.reg0x01.__proto__.set_hex = function(val)
+HTMLInputElement.prototype.set_hex = function(val)
 {
     this.value = val.toString(16);
 }
 
-ctrl.reg0x01.__proto__.get_hex = function()
+HTMLInputElement.prototype.get_hex = function()
 {
     return parseInt(this.value, 16);
 }
 
-ctrl.reg0x01.__proto__.get_hex_c_str = function()
+HTMLInputElement.prototype.get_hex_c_str = function()
 {
     return "0x" + this.value;
 }
 
 
-ctrl.reg0x01.__proto__.check_for_valid_2_digit_hex = function()
+HTMLInputElement.prototype.check_for_valid_2_digit_hex = function()
 {
     this.style.color = /^[0-9a-fA-F]{1,2}$/i.test(this.value) ? "" : "red";
 }
@@ -201,8 +202,8 @@ ctrl.reg0x01.__proto__.check_for_valid_2_digit_hex = function()
 ctrl.lf.onchange = ctrl.mode.onchange = function()
 {
     var reg_val = ctrl.mode.value;
-    reg_val |= 0b10000000;
-    reg_val |= (ctrl.lf.checked ? 0b1000 : 0);
+    reg_val |= 0x80;
+    reg_val |= (ctrl.lf.checked ? 0x08 : 0);
     ctrl.reg0x01.set_hex(reg_val);
     ctrl.blob.calc();
 }
@@ -211,8 +212,8 @@ ctrl.reg0x01.oninput = function()
 {
     this.check_for_valid_2_digit_hex();
     var val = this.get_hex();
-    ctrl.lf.checked = val & 0b1000;
-    ctrl.mode.value = val & 0b111;
+    ctrl.lf.checked = val & 0x08;
+    ctrl.mode.value = val & 0x07;
     ctrl.blob.calc();
 }
 
@@ -257,7 +258,7 @@ ctrl.reg0x1D.oninput = function()
 
 ctrl.sf.onchange = ctrl.crc.onchange = function()
 {
-    var reg_val = ctrl.sf.value << 4 | (ctrl.crc.checked ? 0b100 : 0);
+    var reg_val = ctrl.sf.value << 4 | (ctrl.crc.checked ? 0x04 : 0);
     ctrl.reg0x1E.set_hex(reg_val);
     ctrl.blob.calc();
 }
@@ -267,7 +268,7 @@ ctrl.reg0x1E.oninput = function()
     this.check_for_valid_2_digit_hex();
     var val = this.get_hex();
     ctrl.sf.value = val >> 4;
-    ctrl.crc.checked = val & 0b100;
+    ctrl.crc.checked = val & 0x04;
     ctrl.blob.calc();
 }
 
@@ -305,9 +306,9 @@ ctrl.agc.onchange = ctrl.ld.onchange = function()
 {
     var reg_val = 0;
     if(ctrl.agc.checked)
-        reg_val |= 0b00000100;
+        reg_val |= 0x04;
     if(ctrl.ld.checked)
-        reg_val |= 0b00001000;
+        reg_val |= 0x08;
     ctrl.reg0x26.set_hex(reg_val);
     ctrl.blob.calc();
 }
@@ -316,8 +317,8 @@ ctrl.reg0x26.oninput = function()
 {
     this.check_for_valid_2_digit_hex();
     var val = this.get_hex();
-    ctrl.agc.checked = val & 0b00000100;
-    ctrl.ld.checked = val & 0b00001000;
+    ctrl.agc.checked = val & 0x04;
+    ctrl.ld.checked = val & 0x08;
     ctrl.blob.calc();
 }
 
@@ -348,7 +349,7 @@ ctrl.mode.get_tx_power = function()
 ctrl.mode.get_lna_gain = function()
 {
     if(5 == this.value || 6 == this.value)
-        return "  , 0x0C, 0b00100000 //LNA highest gain\n";
+        return "  , 0x0C, 0x20 //LNA highest gain\n";
     return "";
 }
 
@@ -396,7 +397,7 @@ ctrl.blob.calc = function()
     var de = !!(0x08 & ctrl.reg0x26.get_hex());
     var h = 0x01 & ctrl.reg0x1D.get_hex();
     var cr = (0x0E & ctrl.reg0x1D.get_hex()) >> 1;
-    var tsym = 2 ** sf / bw;
+    var tsym = Math.pow(2, sf / bw);
 
     var tpr = pr * tsym;
     var pl_sym_nb = 8 + Math.max(Math.ceil((8 * pl - 4 * sf + 28 + 16 * crc - 20 * h) / 4 / (sf - 2 * de)) * (cr + 4), 0);
@@ -416,7 +417,7 @@ ctrl.blob.calc = function()
         + "  , 0x07, " + ctrl.reg0x07.get_hex_c_str() + " //Mid.\n"
         + "  , 0x08, " + ctrl.reg0x08.get_hex_c_str() + " //LSB\n"
         + ctrl.mode.get_tx_power()
-        + "  , 0x0B, 0b00001011 //OCP off\n"
+        + "  , 0x0B, 0x0B //OCP off\n"
         + ctrl.mode.get_lna_gain()
         + "  , 0x0E, 0x00 //TX base address\n"
         + "  , 0x0F, 0x00 //RX base address\n"
@@ -439,5 +440,5 @@ ctrl.blob.calc = function()
 ctrl.blob.calc();
 
 </script>
-<script src="http://shah32768.sdf.org/cgi-bin/counter.cgi?lora"></script>
+<script src='/cgi-bin/stat.cgi?lora'></script>
 </html>
