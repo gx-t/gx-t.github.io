@@ -4,7 +4,7 @@
   "icons": [
     {
       "src": "img/Globe.png",
-      "sizes": "48x48"
+      "sizes": "192x192"
     }
   ],
   "theme_color": "#ff0000",
