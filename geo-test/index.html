@@ -29,20 +29,24 @@ draw_portrait = function() {
     var center = w / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    var txt_w = ctx.measureText(gps.coords.altitude).width;
-    ctx.fillText(gps.coords.altitude, quarter - txt_w / 2, quarter);
-    txt_w = ctx.measureText(gps.coords.speed).width;
-    ctx.fillText(gps.coords.speed, center + quarter - txt_w / 2, quarter);
+    var txt = Math.round(gps.coords.altitude);
+    var txt_w = ctx.measureText(txt).width;
+    ctx.fillText(txt, quarter - txt_w / 2, quarter);
+    txt = Math.round(gps.coords.speed);
+    txt_w = ctx.measureText(txt).width;
+    ctx.fillText(txt, center + quarter - txt_w / 2, quarter);
 }
 
 draw_landscape = function() {
     var center = h / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    var txt_w = ctx.measureText(gps.coords.altitude).width;
-    ctx.fillText(gps.coords.altitude, quarter - txt_w / 2, quarter);
-    txt_w = ctx.measureText(gps.coords.speed).width;
-    ctx.fillText(gps.coords.speed, quarter - txt_w / 2, center + quarter);
+    var txt = Math.round(gps.coords.altitude);
+    var txt_w = ctx.measureText(txt).width;
+    ctx.fillText(txt, quarter - txt_w / 2, quarter);
+    txt = Math.round(gps.coords.speed);
+    txt_w = ctx.measureText(txt).width;
+    ctx.fillText(txt, quarter - txt_w / 2, center + quarter);
 }
 
 draw = function() {
