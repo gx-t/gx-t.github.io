@@ -25,28 +25,25 @@ altitude: 0,
         }
 };
 
+draw_text_centered = function(x, y, txt) {
+    var txt_w = ctx.measureText(txt).width;
+    ctx.fillText(txt, x - txt_w / 2, y);
+}
+
 draw_portrait = function() {
     var center = w / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    var txt = Math.round(gps.coords.altitude);
-    var txt_w = ctx.measureText(txt).width;
-    ctx.fillText(txt, quarter - txt_w / 2, quarter);
-    txt = Math.round(3.6 * gps.coords.speed);
-    txt_w = ctx.measureText(txt).width;
-    ctx.fillText(txt, center + quarter - txt_w / 2, quarter);
+    draw_text_centered(quarter, quarter, Math.round(gps.coords.altitude)); 
+    draw_text_centered(center + quarter, quarter, Math.round(3.6 * gps.coords.speed)); 
 }
 
 draw_landscape = function() {
     var center = h / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    var txt = Math.round(gps.coords.altitude);
-    var txt_w = ctx.measureText(txt).width;
-    ctx.fillText(txt, quarter - txt_w / 2, quarter);
-    txt = Math.round(gps.coords.speed);
-    txt_w = ctx.measureText(txt).width;
-    ctx.fillText(txt, quarter - txt_w / 2, center + quarter);
+    draw_text_centered(quarter, quarter, Math.round(gps.coords.altitude)); 
+    draw_text_centered(center + quarter, center + quarter, Math.round(3.6 * gps.coords.speed)); 
 }
 
 draw = function() {
