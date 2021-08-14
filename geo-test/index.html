@@ -18,12 +18,7 @@ html, body {
 var ctx = null;
 var w = 0;
 var h = 0;
-var gps = {
-coords: {
-altitude: 0,
-          speed: 0
-        }
-};
+var gps = {coords: {altitude: 0,speed: 0}};
 
 draw_text_centered = function(x, y, txt) {
     var txt_w = ctx.measureText(txt).width;
@@ -34,24 +29,24 @@ draw_portrait = function() {
     var center = w / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    draw_text_centered(quarter, quarter, Math.round(gps.coords.altitude)); 
-    draw_text_centered(center + quarter, quarter, Math.round(3.6 * gps.coords.speed)); 
+    draw_text_centered(quarter, quarter / 2, Math.round(gps.coords.altitude)); 
+    draw_text_centered(center + quarter, quarter / 2, Math.round(3.6 * gps.coords.speed)); 
 }
 
 draw_landscape = function() {
     var center = h / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    draw_text_centered(quarter, quarter, Math.round(gps.coords.altitude)); 
-    draw_text_centered(center + quarter, center + quarter, Math.round(3.6 * gps.coords.speed)); 
+    draw_text_centered(quarter, quarter / 2, Math.round(gps.coords.altitude)); 
+    draw_text_centered(quarter, quarter + quarter / 2, Math.round(3.6 * gps.coords.speed)); 
 }
 
 draw = function() {
     w = cs.width;
     h = cs.height;
     ctx.fillStyle = "#00FFFFFF";
+    ctx.textBaseline = 'center';
     ctx.clearRect(0, 0, w, h);
-//    ctx.fillRect(0, 0, w, h);
     if(w > h)
         return draw_landscape(ctx, w, h);
     draw_portrait(ctx, w, h);
@@ -61,17 +56,8 @@ window.onload = function() {
     ctx = cs.getContext("2d");
     window.onresize();
 
-    if(navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-                function(gg) {
-                gps = gg;
-                draw();
-                },
-                function(error) {
-                },
-                { enableHighAccuracy: true }
-                );
-    }
+    if(navigator.geolocation)
+        navigator.geolocation.watchPosition(function(gg) {gps = gg;draw();},function(error) {},{ enableHighAccuracy: true });
 }
 
 window.onresize = function() {
