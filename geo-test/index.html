@@ -20,7 +20,7 @@ var w = 0;
 var h = 0;
 var gps = {coords: {altitude: 0,speed: 0}};
 
-const keep_awake = async() => {
+keep_awake = async function() {
     if(!navigator.wakeLock)
         return;
     try {await navigator.wakeLock.request('screen');} catch (err) {console.log(err);}
