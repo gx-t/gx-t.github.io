@@ -19,6 +19,21 @@ var ctx = null;
 var w = 0;
 var h = 0;
 var gps = {coords: {altitude: 0,speed: 0}};
+var wake_lock = null;
+
+async function keep_awake() {
+    if(!navigator.wakeLock)
+        return;
+    try {wait_lock = await navigator.wakeLock.request('screen');} catch (err) {console.log(err);}
+}
+
+function release_awake() {
+    if(!wake_lock)
+        return;
+
+    wake_lock.release();
+    wake_lock = null;
+}
 
 draw_portrait = function() {
     var center = w / 2;
@@ -60,6 +75,13 @@ window.onresize = function() {
     cs.width = window.innerWidth;
     cs.height = window.innerHeight;
     draw();
+}
+
+document.onvisibilitychange = function() {
+        if("visible" === document.visibilityState)
+            keep_awake();
+        else
+            release_awake();
 }
 </script>
 </head>
