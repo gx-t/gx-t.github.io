@@ -20,32 +20,28 @@ var w = 0;
 var h = 0;
 var gps = {coords: {altitude: 0,speed: 0}};
 
-draw_text_centered = function(x, y, txt) {
-    var txt_w = ctx.measureText(txt).width;
-    ctx.fillText(txt, x - txt_w / 2, y);
-}
-
 draw_portrait = function() {
     var center = w / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    draw_text_centered(quarter, quarter / 2, Math.round(gps.coords.altitude)); 
-    draw_text_centered(center + quarter, quarter / 2, Math.round(3.6 * gps.coords.speed)); 
+    ctx.fillText(Math.round(gps.coords.altitude), quarter, quarter / 2); 
+    ctx.fillText(Math.round(3.6 * gps.coords.speed), center + quarter, quarter / 2); 
 }
 
 draw_landscape = function() {
     var center = h / 2;
     var quarter = center / 2;
     ctx.font = quarter / 2 + 'pt Calibri';
-    draw_text_centered(quarter, quarter / 2, Math.round(gps.coords.altitude)); 
-    draw_text_centered(quarter, quarter + quarter / 2, Math.round(3.6 * gps.coords.speed)); 
+    ctx.fillText(Math.round(gps.coords.altitude), quarter, quarter / 2); 
+    ctx.fillText(Math.round(3.6 * gps.coords.speed), quarter, quarter + quarter / 2); 
 }
 
 draw = function() {
     w = cs.width;
     h = cs.height;
     ctx.fillStyle = "#00FFFFFF";
-    ctx.textBaseline = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
     ctx.clearRect(0, 0, w, h);
     if(w > h)
         return draw_landscape(ctx, w, h);
