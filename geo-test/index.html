@@ -67,7 +67,7 @@ window.onload = function() {
     if(!navigator.geolocation)
         return;
 
-    navigator.geolocation.watchPosition(function(gg) {gps = gg;gps_color="#00FFFFFF";update();},function(error) {gps_color="#777777FF";update();},{ enableHighAccuracy: true, timout: 3000, maximumAge: 0 });
+    navigator.geolocation.watchPosition(function(gg) {gps = gg;gps_color="#00FFFFFF";update();},function(error) {gps_color="#777777FF";update();},{ enableHighAccuracy: true, timout: 3000 });
 }
 
 window.onresize = function() {
