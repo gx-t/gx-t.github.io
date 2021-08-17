@@ -19,6 +19,7 @@ var ctx = null;
 var w = 0;
 var h = 0;
 var gps = {coords: {altitude: 0,speed: 0}};
+var gps_color = "#777777FF";
 
 keep_awake = async function() {
     if(!navigator.wakeLock)
@@ -45,7 +46,7 @@ draw_landscape = function() {
 draw = function() {
     w = cs.width;
     h = cs.height;
-    ctx.fillStyle = "#00FFFFFF";
+    ctx.fillStyle = gps_color;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
     ctx.clearRect(0, 0, w, h);
@@ -54,19 +55,25 @@ draw = function() {
     draw_portrait(ctx, w, h);
 }
 
+update = function() {
+    window.requestAnimationFrame(draw);
+}
+
 window.onload = function() {
     keep_awake();
     ctx = cs.getContext("2d");
     window.onresize();
 
-    if(navigator.geolocation)
-        navigator.geolocation.watchPosition(function(gg) {gps = gg;draw();},function(error) {},{ enableHighAccuracy: true });
+    if(!navigator.geolocation)
+        return;
+
+    navigator.geolocation.watchPosition(function(gg) {gps = gg;gps_color="#00FFFFFF";update();},function(error) {gps_color="#777777FF";update();},{ enableHighAccuracy: true, timout: 3000 });
 }
 
 window.onresize = function() {
     cs.width = window.innerWidth;
     cs.height = window.innerHeight;
-    draw();
+    update();
 }
 
 document.onvisibilitychange = function() {
