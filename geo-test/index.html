@@ -58,7 +58,7 @@ draw_compass = function(x, y, r, alpha) {
     ctx.translate(x, y);
 //    ctx.rotate(Math.PI / 4 + compass.alpha / 180 * Math.PI);
     ctx.font = r / 7 + 'pt Calibri';
-    ctx.fillText(compass.alpha, 0, 0);
+    ctx.fillText(Math.round(compass.alpha), 0, 0);
 
     ctx.rotate(Math.PI / 2 + compass.alpha / 180 * Math.PI);
     ctx.strokeRect(-r/2, -r/2, r, r);
