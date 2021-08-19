@@ -58,6 +58,21 @@ draw_compass = function(x, y, r, alpha) {
     ctx.translate(x, y);
     ctx.rotate(Math.PI / 4 + compass.alpha / 180 * Math.PI);
     ctx.strokeRect(-r/2, -r/2, r, r);
+
+    ctx.font = r / 7 + 'pt Calibri';
+    ctx.lineWidth = 1;
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillStyle = 'red';
+    ctx.fillText("N", 0, -r/2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = 'yellow';
+    ctx.fillText("W", 0, -r/2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = 'blue';
+    ctx.fillText("S", 0, -r/2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = 'yellow';
+    ctx.fillText("E", 0, -r/2);
     ctx.restore();
 }
 
