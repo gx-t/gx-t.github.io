@@ -109,7 +109,7 @@ window.onresize = function() {
 window.addEventListener("deviceorientationabsolute", function(e) {
     compass = e;
     draw();
-}, true);
+});
 
 document.onvisibilitychange = function() {
     if("visible" === document.visibilityState)
