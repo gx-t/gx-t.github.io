@@ -106,7 +106,7 @@ window.onresize = function() {
     draw();
 }
 
-window.addEventListener("deviceorientation", function(e) {
+window.addEventListener("deviceorientationabsolute", function(e) {
     compass = e;
     draw();
 }, true);
