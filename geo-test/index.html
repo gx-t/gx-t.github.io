@@ -42,10 +42,10 @@ draw_landscape = function() {
     ctx.font = quarter / 2 + 'pt Calibri';
     ctx.fillText(Math.round(gps.coords.altitude), quarter, quarter / 2); 
     ctx.fillText(Math.round(3.6 * gps.coords.speed), quarter, quarter + quarter / 2); 
-    draw_compass(cs.width / 2 + cs.width / 4, center + quarter / 2, cs.width / 4, 0);
+    draw_compass(cs.width / 2 + cs.width / 4, center + quarter / 2, cs.width / 4, -Math.PI / 2);
 }
 
-draw_compass = function(x, y, r, alpha) {
+draw_compass = function(x, y, r, init_rot) {
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'green';
 //    ctx.shadowColor = 'white';
@@ -56,7 +56,7 @@ draw_compass = function(x, y, r, alpha) {
 //   ctx.stroke();
     ctx.save();
     ctx.translate(x, y);
-//    ctx.rotate(Math.PI / 4 + compass.alpha / 180 * Math.PI);
+    ctx.rotate(init_rot);
     ctx.font = r / 7 + 'pt Calibri';
     ctx.fillText(Math.round(compass.alpha), 0, 0);
 
