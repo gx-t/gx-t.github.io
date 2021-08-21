@@ -23,7 +23,7 @@ var compass = {alpha: 0};
 
 lock_portrait = function() {
     try {
-        window.screen.orientation.lock("portrait-primary");
+        window.screen.lockOrientation('portrait-primary');
     }
     catch(e) {
         console.log(e);
