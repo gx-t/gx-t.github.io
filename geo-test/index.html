@@ -21,15 +21,6 @@ var h = 0;
 var gps = {coords: {altitude: 0,speed: 0}};
 var compass = {alpha: 0};
 
-lock_portrait = function() {
-    try {
-        window.screen.orientation.lock("portrait-primary");
-    }
-    catch(e) {
-        console.log(e);
-    }
-}
-
 keep_awake = async function() {
     if(!navigator.wakeLock)
         return;
@@ -101,7 +92,6 @@ draw = function() {
 }
 
 window.onload = function() {
-    lock_portrait();
     keep_awake();
     ctx = cs.getContext("2d");
     window.onresize();
