@@ -11,6 +11,5 @@
   "theme_color": "#ff0000",
   "background_color": "#ff0000",
   "start_url": "index.html",
-  "display": "fullscreen",
-  "orientation": "portrait-primary"
+  "display": "fullscreen"
 }
