@@ -16,8 +16,6 @@ html, body {
 
 <script>
 var ctx = null;
-var w = 0;
-var h = 0;
 var gps = {coords: {altitude: 0,speed: 0}};
 var compass = {alpha: 0};
 
@@ -27,59 +25,65 @@ keep_awake = async function() {
     try {await navigator.wakeLock.request('screen');} catch (err) {console.log(err);}
 }
 
-draw_portrait = function() {
-    var center = w / 2;
-    var quarter = center / 2;
-    ctx.font = quarter / 2 + 'pt Calibri';
-    ctx.fillText(Math.round(gps.coords.altitude), quarter, quarter / 2); 
-    ctx.fillText(Math.round(3.6 * gps.coords.speed), center + quarter, quarter / 2); 
-    draw_compass(center + quarter / 2, cs.height / 2 + cs.height / 4, cs.height / 4, 0);
-}
-
-draw_landscape = function() {
-    var center = h / 2;
-    var quarter = center / 2;
-    ctx.font = quarter / 2 + 'pt Calibri';
-    ctx.fillText(Math.round(gps.coords.altitude), quarter, quarter / 2); 
-    ctx.fillText(Math.round(3.6 * gps.coords.speed), quarter, quarter + quarter / 2); 
-    draw_compass(cs.width / 2 + cs.width / 4, center + quarter / 2, cs.width / 4, -Math.PI / 2);
-}
-
 draw_compass = function(x, y, r, init_rot) {
     var alpha = Math.round(compass.alpha) % 360;
     ctx.lineWidth = 3;
-    ctx.strokeStyle = 'green';
+    ctx.strokeStyle = 'white';
     ctx.save();
     ctx.translate(x, y);
-    ctx.font = r / 7 + 'pt Calibri';
+    ctx.font = r / 4 + 'pt Calibri';
+    r *= 0.75;
     ctx.fillText(alpha, 0, 0);
 
     ctx.rotate(compass.alpha / 180 * Math.PI + init_rot);
     ctx.lineWidth = 1;
     ctx.fillStyle = 'red';
-    ctx.fillText("N", 0, -r/2);
+    ctx.fillText("N", 0, -r);
     ctx.rotate(Math.PI / 2);
     ctx.fillStyle = 'yellow';
-    ctx.fillText("E", 0, -r/2);
+    ctx.fillText("E", 0, -r);
     ctx.rotate(Math.PI / 2);
     ctx.fillStyle = 'blue';
-    ctx.fillText("S", 0, -r/2);
+    ctx.fillText("S", 0, -r);
     ctx.rotate(Math.PI / 2);
     ctx.fillStyle = 'yellow';
-    ctx.fillText("W", 0, -r/2);
+    ctx.fillText("W", 0, -r);
+    ctx.rotate(Math.PI / 2);
+
+    for(var i = 0; i < 36; i ++) {
+        ctx.beginPath();
+        ctx.moveTo(0, -r/1.2);
+        ctx.lineTo(0, -r/1.3);
+        ctx.stroke();
+        ctx.rotate(Math.PI / 18);
+    }
     ctx.restore();
 }
 
+draw_portrait = function() {
+    ctx.font = cs.width * 0.125 + 'pt Calibri';
+    ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
+    ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width * 0.75, cs.width * 0.125); 
+    var r = cs.height * 0.15;
+    draw_compass(cs.width - r, cs.height - r, r, 0);
+}
+
+draw_landscape = function() {
+    ctx.font = cs.height * 0.125 + 'pt Calibri';
+    ctx.fillText(Math.round(gps.coords.altitude), cs.height * 0.25, cs.height * 0.125); 
+    ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
+    var r = cs.width * 0.15;
+    draw_compass(cs.width - r, cs.height - r, r, -Math.PI / 2);
+}
+
 draw = function() {
-    w = cs.width;
-    h = cs.height;
     ctx.fillStyle = "#00FFFFFF";
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-    ctx.clearRect(0, 0, w, h);
-    if(w > h)
-        return draw_landscape(ctx, w, h);
-    draw_portrait(ctx, w, h);
+    ctx.clearRect(0, 0, cs.width, cs.height);
+    if(cs.width > cs.height)
+        return draw_landscape();
+    draw_portrait();
 }
 
 window.onload = function() {
@@ -102,10 +106,11 @@ window.addEventListener("deviceorientationabsolute", function(e) {
     draw();
 });
 
-document.onvisibilitychange = function() {
+document.addEventListener("visibilitychange", function() {
     if("visible" === document.visibilityState)
         keep_awake();
-}
+});
+
 </script>
 </head>
 <body>
