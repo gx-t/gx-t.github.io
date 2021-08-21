@@ -46,25 +46,16 @@ draw_landscape = function() {
 }
 
 draw_compass = function(x, y, r, init_rot) {
+    var alpha = Math.round(compass.alpha) % 360;
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'green';
-//    ctx.shadowColor = 'white';
-//    ctx.shadowBlur = 10;
-//    ctx.lineJoin = 'bevel';
-//   ctx.beginPath();
-//   ctx.arc(x, y, r, 0, 2 * Math.PI);
-//   ctx.stroke();
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(init_rot);
     ctx.font = r / 7 + 'pt Calibri';
-    ctx.fillText(Math.round(compass.alpha), 0, 0);
+    ctx.fillText(alpha, 0, 0);
 
-    ctx.rotate(compass.alpha / 180 * Math.PI);
-//    ctx.strokeRect(-r/2, -r/2, r, r);
-
+    ctx.rotate(compass.alpha / 180 * Math.PI + init_rot);
     ctx.lineWidth = 1;
-//    ctx.rotate(Math.PI / 4);
     ctx.fillStyle = 'red';
     ctx.fillText("N", 0, -r/2);
     ctx.rotate(Math.PI / 2);
