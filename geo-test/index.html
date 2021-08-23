@@ -25,7 +25,7 @@ keep_awake = async function() {
     try {await navigator.wakeLock.request('screen');} catch (err) {console.log(err);}
 }
 
-on_orientation_change() {
+on_orientation_change = function(e) {
     compass = e;
     draw();
 }
@@ -36,11 +36,13 @@ init_compass = function() {
         return;
     }
 
-    if("granted" != await DeviceOrientationEvent.requestPermission() {
-        alert("DeviceOrientationEvent.requestPermission - not granted");
-        return;
-    }
-    window.addEventListener("deviceorientation", on_orientation_change);
+    DeviceOrientationEvent.requestPermission().then(function(resp) {
+        if("granted" != resp) {
+            alert("DeviceOrientationEvent.requestPermission - not granted");
+            return;
+        }
+        window.addEventListener("deviceorientation", on_orientation_change);
+    });
 }
 
 draw_compass = function(x, y, r, init_rot) {
