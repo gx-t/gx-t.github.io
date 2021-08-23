@@ -25,6 +25,24 @@ keep_awake = async function() {
     try {await navigator.wakeLock.request('screen');} catch (err) {console.log(err);}
 }
 
+on_orientation_change() {
+    compass = e;
+    draw();
+}
+
+init_compass = function() {
+    if(!DeviceOrientationEvent.requestPermission) {
+        window.addEventListener("deviceorientationabsolute", on_orientation_change);
+        return;
+    }
+
+    if("granted" != await DeviceOrientationEvent.requestPermission() {
+        alert("DeviceOrientationEvent.requestPermission - not granted");
+        return;
+    }
+    window.addEventListener("deviceorientation", on_orientation_change);
+}
+
 draw_compass = function(x, y, r, init_rot) {
     var alpha = Math.round(compass.alpha) % 360;
     ctx.lineWidth = 3;
@@ -101,10 +119,7 @@ window.onresize = function() {
     draw();
 }
 
-window.addEventListener("deviceorientationabsolute", function(e) {
-    compass = e;
-    draw();
-});
+init_compass();
 
 document.addEventListener("visibilitychange", function() {
     if("visible" === document.visibilityState)
