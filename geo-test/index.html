@@ -113,6 +113,11 @@ window.onload = function() {
 
     if(navigator.geolocation)
         navigator.geolocation.watchPosition(function(gg) {gps = gg;draw();},function(error) {},{ enableHighAccuracy: true });
+    cs.onclick = function() {
+        init_compass();
+        cs.onclick = null;
+    }
+
 }
 
 window.onresize = function() {
@@ -120,8 +125,6 @@ window.onresize = function() {
     cs.height = window.innerHeight;
     draw();
 }
-
-init_compass();
 
 document.addEventListener("visibilitychange", function() {
     if("visible" === document.visibilityState)
