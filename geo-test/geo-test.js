@@ -1,5 +1,5 @@
-function GeoTest(canvas_id) {
-    var cs = document.getElementById(canvas_id);
+function GeoTest() {
+    var cs = document.createElement("canvas");
     var gps = {coords: {altitude: 0,speed: 0}};
     var compass = {alpha: 0};
     var ctx = cs.getContext("2d");
@@ -13,21 +13,6 @@ function GeoTest(canvas_id) {
     on_orientation_change = function(e) {
         compass = e;
         draw();
-    }
-
-    init_compass = function() {
-        if(!DeviceOrientationEvent.requestPermission) {
-            window.addEventListener("deviceorientationabsolute", on_orientation_change);
-            return;
-        }
-
-        DeviceOrientationEvent.requestPermission().then(function(resp) {
-                if("granted" != resp) {
-                alert("DeviceOrientationEvent.requestPermission - not granted");
-                return;
-                }
-                window.addEventListener("deviceorientation", on_orientation_change);
-                });
     }
 
     draw_compass = function(x, y, r, init_rot) {
@@ -108,12 +93,23 @@ function GeoTest(canvas_id) {
 
     if(navigator.geolocation)
         navigator.geolocation.watchPosition(function(gg) {gps = gg; update();},function(error) {},{ enableHighAccuracy: true });
-    cs.onclick = function() {
-        init_compass();
-        cs.onclick = null;
-    }
 
-    cs.width = window.innerWidth;
-    cs.height = window.innerHeight;
-    update();
+    if(window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
+        cs.onclick = function() {
+            DeviceOrientationEvent.requestPermission().then(function(resp) {
+                    if("granted" != resp) {
+                    alert("DeviceOrientationEvent.requestPermission - not granted");
+                    return;
+                    }
+                    window.addEventListener("deviceorientation", on_orientation_change);
+                    });
+            cs.onclick = null;
+        }
+    }
+    else
+        window.addEventListener("deviceorientationabsolute", on_orientation_change);
+    document.body.appendChild(cs);
+    cs.update = update;
+    return cs;
 }
+

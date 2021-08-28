@@ -15,8 +15,7 @@ html, body {
 </style>
 <script src = 'geo-test.js'></script>
 </head>
-<body onload = 'GeoTest("cs")'>
-<canvas id='cs'></canvas>
+<body onload = 'cs = GeoTest(); onresize();'  onresize='cs.width = window.innerWidth; cs.height = window.innerHeight; cs.update()'>
 </body>
 </html>
 
