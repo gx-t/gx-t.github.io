@@ -50,15 +50,6 @@ function GeoTest() {
         ctx.restore();
     }
 
-    clear_compass = function(x, y, r) {
-        ctx.clearRect(x - r, y - r,  2 * r,  2 * r);
-    }
-
-    flash_compass = function() {
-        compass_draw_proc = compass_draw_proc == draw_compass ? clear_compass : draw_compass;
-        update();
-    }
-
     var compass_draw_proc = draw_compass;
 
     draw_portrait = function() {
@@ -106,25 +97,30 @@ function GeoTest() {
         navigator.geolocation.watchPosition(function(gg) {gps = gg; update();},function(error) {},{ enableHighAccuracy: true });
 
     if(window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
-        DeviceOrientationEvent.requestPermission().then(resp => {
-                if("granted" != resp) {
-                var it = setInterval(flash_compass, 500);
-                cs.onclick = function() {
-                DeviceOrientationEvent.requestPermission().then(resp => {
-                        if("granted" == resp) {
-                        clearInterval(it);
-                        compass_draw_proc = draw_compass;
-                        window.addEventListener("deviceorientation", on_orientation_change);
-                        update();
-                        }
-                        else {
-                        alert("DeviceOrientationEvent.requestPermission - not granted");
-                        }
-                        });
-                cs.onclick = null;
+        var it = setInterval(function() {
+                if(compass_draw_proc == draw_compass) {
+                compass_draw_proc = function(x, y, r) {
+                    ctx.clearRect(x - r, y - r,  2 * r,  2 * r);
                 }
                 }
-                });
+                else{
+                compass_draw_proc = draw_compass;
+                }
+                update();
+                }, 500);
+        cs.onclick = function() {
+            DeviceOrientationEvent.requestPermission().then(function(resp) {
+                    if("granted" != resp) {
+                    alert("DeviceOrientationEvent.requestPermission - not granted");
+                    return;
+                    }
+                    clearInterval(it);
+                    compass_draw_proc = draw_compass;
+                    window.addEventListener("deviceorientation", on_orientation_change);
+                    update();
+                    });
+            cs.onclick = null;
+        }
     }
     else {
         window.addEventListener("deviceorientationabsolute", on_orientation_change);
