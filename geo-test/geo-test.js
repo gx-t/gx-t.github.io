@@ -52,6 +52,18 @@ function GeoTest() {
 
     var compass_draw_proc = draw_compass;
 
+    flash_compass = function() {
+        if(compass_draw_proc == draw_compass) {
+            compass_draw_proc = function(x, y, r) {
+                ctx.clearRect(x - r, y - r,  2 * r,  2 * r);
+            }
+        }
+        else{
+            compass_draw_proc = draw_compass;
+        }
+        update();
+    }
+
     draw_portrait = function() {
         ctx.font = cs.width * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
@@ -97,17 +109,7 @@ function GeoTest() {
         navigator.geolocation.watchPosition(function(gg) {gps = gg; update();},function(error) {},{ enableHighAccuracy: true });
 
     if(window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
-        var it = setInterval(function() {
-                if(compass_draw_proc == draw_compass) {
-                compass_draw_proc = function(x, y, r) {
-                    ctx.clearRect(x - r, y - r,  2 * r,  2 * r);
-                }
-                }
-                else{
-                compass_draw_proc = draw_compass;
-                }
-                update();
-                }, 500);
+        var it = setInterval(flash_compass, 250);
         cs.onclick = function() {
             DeviceOrientationEvent.requestPermission().then(function(resp) {
                     if("granted" != resp) {
