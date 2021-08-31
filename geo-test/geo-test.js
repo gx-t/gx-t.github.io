@@ -1,6 +1,7 @@
 function GeoTest() {
     var cs = document.createElement("canvas");
     var gps = {coords: {altitude: 0,speed: 0}};
+    var dt = new Date();
     var compass = {alpha: 0};
     var ctx = cs.getContext("2d");
 
@@ -68,6 +69,11 @@ function GeoTest() {
         ctx.font = cs.width * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width * 0.75, cs.width * 0.125); 
+
+        ctx.font = cs.width * 0.05 + 'pt Calibri';
+        ctx.fillStyle = "#BBBBBBBB";
+        ctx.fillText(dt.toLocaleTimeString(), cs.width * 0.25, cs.height - cs.width * 0.05); 
+
         var r = cs.height * 0.15;
         compass_draw_proc(cs.width - r, cs.height - r, r, 0);
     }
@@ -76,6 +82,11 @@ function GeoTest() {
         ctx.font = cs.height * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.height * 0.25, cs.height * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
+
+        ctx.font = cs.height * 0.05 + 'pt Calibri';
+        ctx.fillStyle = "#BBBBBBBB";
+        ctx.fillText(dt.toLocaleTimeString(), cs.width * 0.15, cs.height - cs.height * 0.05); 
+
         var r = cs.width * 0.15;
         compass_draw_proc(cs.width - r, cs.height - r, r, -Math.PI / 2);
     }
@@ -106,7 +117,7 @@ function GeoTest() {
     keep_awake();
 
     if(navigator.geolocation)
-        navigator.geolocation.watchPosition(function(gg) {gps = gg; update();},function(error) {},{ enableHighAccuracy: true });
+        navigator.geolocation.watchPosition(function(gg) {gps = gg; dt.setTime(gg.timestamp); update();},function(error) {},{ enableHighAccuracy: true });
 
     if(window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
         var it = setInterval(flash_compass, 250);
