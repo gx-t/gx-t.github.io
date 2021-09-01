@@ -70,8 +70,8 @@ function GeoTest() {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
         ctx.font = s + 'pt Calibri';
-        ctx.fillStyle = "#BBBBBBBB";
-        ctx.fillText('sat: ' + dt.toLocaleTimeString(), x, y); 
+        ctx.fillStyle = '#BBBBBBBB';
+        ctx.fillText('geo: ' + dt.toLocaleTimeString(), x, y); 
         ctx.restore();
     }
 
