@@ -16,6 +16,11 @@ self.addEventListener('install', (e) => {
 //        });
 //
 
-//self.addEventListener('fetch', function(e) {e.respondWith(caches.open('geo-test').then(function(cache) {return fetch(e.request).then(function(response) {cache.put(e.request, response.clone());return response;});}));});
+self.addEventListener('fetch', function(e) {
+    e.respondWith(caches.open('geo-test').then(function(cache) {
+        return fetch(e.request).then(function(response) {
+            cache.put(e.request, response.clone());return response;
+        });
+    }));
+});
 
-self.addEventListener('fetch', (e)=>{e.respondWith(caches.open('geo-test').then((c)=>{return fetch(e.request).then((r)=>{c.put(e.request, r.clone());return r;});}));});
