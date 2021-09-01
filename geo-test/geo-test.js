@@ -65,15 +65,21 @@ function GeoTest() {
         update();
     }
 
+    draw_time = function(x, y, s) {
+        ctx.save();
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.font = s + 'pt Calibri';
+        ctx.fillStyle = "#BBBBBBBB";
+        ctx.fillText('sat: ' + dt.toLocaleTimeString(), x, y); 
+        ctx.restore();
+    }
+
     draw_portrait = function() {
         ctx.font = cs.width * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width * 0.75, cs.width * 0.125); 
-
-        ctx.font = cs.width * 0.05 + 'pt Calibri';
-        ctx.fillStyle = "#BBBBBBBB";
-        ctx.fillText(dt.toLocaleTimeString(), cs.width * 0.25, cs.height - cs.width * 0.05); 
-
+        draw_time(0, cs.height, cs.width * 0.05);
         var r = cs.height * 0.15;
         compass_draw_proc(cs.width - r, cs.height - r, r, 0);
     }
@@ -82,11 +88,7 @@ function GeoTest() {
         ctx.font = cs.height * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.height * 0.25, cs.height * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
-
-        ctx.font = cs.height * 0.05 + 'pt Calibri';
-        ctx.fillStyle = "#BBBBBBBB";
-        ctx.fillText(dt.toLocaleTimeString(), cs.width * 0.15, cs.height - cs.height * 0.05); 
-
+        draw_time(0, cs.height, cs.height * 0.05);
         var r = cs.width * 0.15;
         compass_draw_proc(cs.width - r, cs.height - r, r, -Math.PI / 2);
     }
