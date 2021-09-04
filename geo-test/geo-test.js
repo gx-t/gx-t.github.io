@@ -17,7 +17,7 @@ function GeoTest() {
     }
 
     draw_compass = function(x, y, r, init_rot) {
-        var alpha = Math.round(compass.alpha) % 360;
+        var alpha = Math.round(compass.alpha + init_rot) % 360;
         ctx.lineWidth = 3;
         ctx.strokeStyle = 'white';
         ctx.save();
@@ -26,7 +26,7 @@ function GeoTest() {
         r *= 0.75;
         ctx.fillText(alpha, 0, 0);
 
-        ctx.rotate(compass.alpha / 180 * Math.PI + init_rot);
+        ctx.rotate((compass.alpha + init_rot)/ 180 * Math.PI);
         ctx.lineWidth = 1;
         ctx.fillStyle = 'red';
         ctx.fillText("N", 0, -r);
@@ -90,7 +90,7 @@ function GeoTest() {
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
         draw_time(0, cs.height, cs.height * 0.05);
         var r = cs.width * 0.15;
-        compass_draw_proc(cs.width - r, cs.height - r, r, -Math.PI / 2);
+        compass_draw_proc(cs.width - r, cs.height - r, r, compass.gamma > 0 ? 90 : 270);
     }
 
     draw = function() {
