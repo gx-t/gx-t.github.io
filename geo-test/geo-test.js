@@ -71,7 +71,7 @@ function GeoTest() {
         ctx.textBaseline = 'bottom';
         ctx.font = s + 'pt Calibri';
         ctx.fillStyle = '#BBBBBBBB';
-        ctx.fillText('geo: ' + dt.toLocaleTimeString([], { hour12: false }), x, y); 
+        ctx.fillText('v1: ' + dt.toLocaleTimeString([], { hour12: false }), x, y); 
         ctx.restore();
     }
 
