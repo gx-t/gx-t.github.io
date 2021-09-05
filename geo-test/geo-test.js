@@ -79,18 +79,18 @@ function GeoTest() {
         ctx.font = cs.width * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width * 0.75, cs.width * 0.125); 
-        draw_time(0, cs.height, cs.width * 0.05);
+        draw_time(cs.width / 25, cs.height, cs.width * 0.05);
         var r = cs.height * 0.15;
-        compass_draw_proc(cs.width - r, cs.height - r, r, 0);
+        compass_draw_proc(cs.width - r - cs.width / 25, cs.height - r, r, 0);
     }
 
     draw_landscape = function() {
         ctx.font = cs.height * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.height * 0.25, cs.height * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
-        draw_time(0, cs.height, cs.height * 0.05);
+        draw_time(cs.width / 25, cs.height, cs.height * 0.05);
         var r = cs.width * 0.15;
-        compass_draw_proc(cs.width - r, cs.height - r, r, compass.gamma > 0 ? 90 : 270);
+        compass_draw_proc(cs.width - r - cs.width / 25, cs.height - r, r, compass.gamma > 0 ? 90 : 270);
     }
 
     draw = function() {
