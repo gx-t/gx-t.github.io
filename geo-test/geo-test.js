@@ -18,7 +18,7 @@ function GeoTest() {
                 clearTimeout(timer);
                 return;
             }
-            div.style = "position: absolute; left: 0px; top: 0px; display: block; background:#000000BA; font-size: 50px";
+            div.style = "position: absolute; left: " + e.x + "px; top: " + e.y + "px; display: block; background:#000000BA; font-size: 50px";
             console.log(e);
             timer = setTimeout(() => {div.style.display = "none"}, 3000);
         }
