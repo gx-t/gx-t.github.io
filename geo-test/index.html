@@ -16,7 +16,7 @@ html, body {
 </style>
 <script src = 'geo-test.js'></script>
 <script>
-if('serviceWorker' in navigator) {
+if(navigator.serviceWorker) {
     navigator.serviceWorker.register('sw.js');
 }
 </script>
