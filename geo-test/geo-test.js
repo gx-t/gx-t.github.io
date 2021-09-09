@@ -5,6 +5,10 @@ function GeoTest() {
     var compass = {alpha: 0};
     var ctx = cs.getContext("2d");
 
+    var empty_proc = function() {};
+    var draw_layer_0 = empty_proc;
+    var draw_layer_1 = empty_proc;
+
     main_menu = function() {
         var div = document.createElement("div");
         var timer = 0;
@@ -48,7 +52,7 @@ function GeoTest() {
 
     on_orientation_change = function(e) {
         compass = e;
-        draw();
+        update();
     }
 
     draw_compass = function(x, y, r, init_rot) {
@@ -114,7 +118,19 @@ function GeoTest() {
         ctx.restore();
     }
 
-    draw_portrait = function() {
+    draw_layer_0 = function() {
+        ctx.fillStyle = "#00FFFFFF";
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.clearRect(0, 0, cs.width, cs.height);
+        if(cs.width > cs.height) {
+            ctx.font = cs.height * 0.125 + 'pt Calibri';
+            ctx.fillText(Math.round(gps.coords.altitude), cs.height * 0.25, cs.height * 0.125); 
+            ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
+            draw_coord_time(cs.width / 25, cs.height, cs.height * 0.05);
+            var r = cs.width * 0.15;
+            compass_draw_proc(cs.width - r - cs.width / 25, cs.height - r, r, compass.gamma > 0 ? 90 : 270);
+        }
         ctx.font = cs.width * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width * 0.75, cs.width * 0.125); 
@@ -123,26 +139,7 @@ function GeoTest() {
         compass_draw_proc(cs.width - r - cs.width / 25, cs.height - r, r, 0);
     }
 
-    draw_landscape = function() {
-        ctx.font = cs.height * 0.125 + 'pt Calibri';
-        ctx.fillText(Math.round(gps.coords.altitude), cs.height * 0.25, cs.height * 0.125); 
-        ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.height * 0.25, cs.height * 0.325); 
-        draw_coord_time(cs.width / 25, cs.height, cs.height * 0.05);
-        var r = cs.width * 0.15;
-        compass_draw_proc(cs.width - r - cs.width / 25, cs.height - r, r, compass.gamma > 0 ? 90 : 270);
-    }
-
-    draw = function() {
-        ctx.fillStyle = "#00FFFFFF";
-        ctx.textBaseline = 'middle';
-        ctx.textAlign = 'center';
-        ctx.clearRect(0, 0, cs.width, cs.height);
-        if(cs.width > cs.height)
-            return draw_landscape();
-        draw_portrait();
-    }
-
-    update = function() { window.requestAnimationFrame(draw); }
+    update = function() { window.requestAnimationFrame(function() { draw_layer_0(); draw_layer_1(); }); }
 
     window.addEventListener("resize", function() {
         cs.width = window.innerWidth;
