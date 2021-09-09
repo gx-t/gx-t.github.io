@@ -130,6 +130,7 @@ function GeoTest() {
             draw_coord_time(cs.width / 25, cs.height, cs.height * 0.05);
             var r = cs.width * 0.15;
             compass_draw_proc(cs.width - r - cs.width / 25, cs.height - r, r, compass.gamma > 0 ? 90 : 270);
+            return;
         }
         ctx.font = cs.width * 0.125 + 'pt Calibri';
         ctx.fillText(Math.round(gps.coords.altitude), cs.width * 0.25, cs.width * 0.125); 
