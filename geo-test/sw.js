@@ -1,4 +1,4 @@
-var cache_name = "geo-test-v0.06";
+var cache_name = "geo-test-v0.07";
 
 self.addEventListener('install', (e) => {
         e.waitUntil(
