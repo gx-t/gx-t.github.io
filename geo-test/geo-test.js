@@ -1,6 +1,6 @@
 function GeoTest() {
     var cs = document.createElement("canvas");
-    var gps = {coords: {altitude: 0,speed: 0,latitude: 0,longitude: 0}};
+    var gps = {coords: {altitude: 0,speed: 0,latitude: 0,longitude: 0,heading: 0}};
     var dt = new Date();
     var compass = {alpha: 0};
     var ctx = cs.getContext("2d");
@@ -11,15 +11,48 @@ function GeoTest() {
 
     main_menu = function() {
         cs.onclick = function(e) {
-            share();
+            var geo_data = {
+                title: 'Geolocation data',
+                text: dt.toLocaleTimeString([], { hour12: false }) + " ( " + dt.toLocaleDateString() + " )\n" +  Math.round(gps.coords.altitude) + " մ\n" + Math.round(Math.round(gps.coords.speed * 3.6)) + " կմ/ժ\n" + Math.round(gps.coords.heading) + " °\n",
+                url: "https://www.openstreetmap.org/?mlat=" + gps.coords.latitude + "&mlon=" + gps.coords.longitude + "#map=17/" + gps.coords.latitude + "/" + gps.coords.longitude,
+                };
+
+            console.log(e.clientX + " " + e.clientY + " " + cs.width + " " + cs.height);
+            if(cs.height > cs.width) {
+                if(e.clientY < cs.height / 2)
+                    return navigator.share && navigator.share(geo_data);
+            }
+            else {
+                if(e.clientX < cs.width / 2)
+                    return navigator.share && navigator.share(geo_data);
+            }
+            return window.location = geo_data.url;
         }
 
-        share = function() {
-            navigator.share && navigator.share({
-                title: 'Geolocation data',
-                text: dt.toLocaleTimeString([], { hour12: false }) + "\n" +  Math.round(gps.coords.altitude) + "m\n" + Math.round(Math.round(gps.coords.speed * 3.6)) + "km/h\n",
-                url: "https://www.openstreetmap.org/?mlat=" + gps.coords.latitude + "&mlon=" + gps.coords.longitude + "#map=17/" + gps.coords.latitude + "/" + gps.coords.longitude,
-                });
+        draw_layer_1 = function() {
+            var txt_share = "Փոխանցել...";
+            var txt_map = "Քարտեզ...";
+            ctx.save();
+            ctx.fillStyle = "#FFFF0020";
+            ctx.strokeStyle = '#0FFFF020';
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            if(cs.width > cs.height) {
+                ctx.fillText(txt_share, cs.width / 4, cs.height / 2); 
+                ctx.fillText(txt_map, cs.width / 4 * 3, cs.height / 2); 
+                ctx.beginPath();
+                ctx.moveTo(cs.width / 2, 0);
+                ctx.lineTo(cs.width / 2, cs.height);
+                ctx.stroke();
+            } else {
+                ctx.fillText(txt_share, cs.width / 2, cs.height / 4); 
+                ctx.fillText(txt_map, cs.width / 2, cs.height / 4 * 3); 
+                ctx.beginPath();
+                ctx.moveTo(0, cs.height / 2);
+                ctx.lineTo(cs.width, cs.height / 2);
+                ctx.stroke();
+            }
+            ctx.restore();
         }
 
     }
