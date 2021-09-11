@@ -10,36 +10,16 @@ function GeoTest() {
     var draw_layer_1 = empty_proc;
 
     main_menu = function() {
-        var div = document.createElement("div");
-        var timer = 0;
-
-        div.innerHTML = (navigator.share ? "<a href='javascript:share();'>Share ...</a><br>" : "") + "<a href='javascript:save();'>Save</a><hr>";
-        div.style.display = "none";
-        document.body.appendChild(div);
         cs.onclick = function(e) {
-            if(div.style.display == "block") {
-                div.style.display = "none";
-                clearTimeout(timer);
-                return;
-            }
-            div.style = "position: absolute; left: " + e.x + "px; top: " + e.y + "px; display: block; background:#000000BA; font-size: 50px";
-            console.log(e);
-            timer = setTimeout(() => {div.style.display = "none"}, 3000);
+            share();
         }
 
         share = function() {
-            div.style.display = "none";
-            clearTimeout(timer);
-            navigator.share({
+            navigator.share && navigator.share({
                 title: 'Geolocation data',
                 text: dt.toLocaleTimeString([], { hour12: false }) + "\n" +  Math.round(gps.coords.altitude) + "m\n" + Math.round(Math.round(gps.coords.speed * 3.6)) + "km/h\n",
                 url: "https://www.openstreetmap.org/?mlat=" + gps.coords.latitude + "&mlon=" + gps.coords.longitude + "#map=17/" + gps.coords.latitude + "/" + gps.coords.longitude,
                 });
-        }
-
-        save = function() {
-            div.style.display = "none";
-            clearTimeout(timer);
         }
 
     }
