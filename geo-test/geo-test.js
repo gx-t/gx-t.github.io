@@ -38,6 +38,7 @@ function GeoTest() {
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
             if(cs.width > cs.height) {
+                ctx.font = cs.height / 10 + 'pt Calibri';
                 ctx.fillText(txt_share, cs.width / 4, cs.height / 2); 
                 ctx.fillText(txt_map, cs.width / 4 * 3, cs.height / 2); 
                 ctx.beginPath();
@@ -45,6 +46,7 @@ function GeoTest() {
                 ctx.lineTo(cs.width / 2, cs.height);
                 ctx.stroke();
             } else {
+                ctx.font = cs.width / 10 + 'pt Calibri';
                 ctx.fillText(txt_share, cs.width / 2, cs.height / 4); 
                 ctx.fillText(txt_map, cs.width / 2, cs.height / 4 * 3); 
                 ctx.beginPath();
