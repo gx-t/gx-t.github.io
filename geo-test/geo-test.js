@@ -33,8 +33,8 @@ function GeoTest() {
             var txt_share = "Փոխանցել...";
             var txt_map = "Քարտեզ...";
             ctx.save();
-            ctx.fillStyle = "#FFFF0020";
-            ctx.strokeStyle = '#0FFFF020';
+            ctx.fillStyle = "#FFFF0040";
+            ctx.strokeStyle = '#0FFFF040';
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
             if(cs.width > cs.height) {
