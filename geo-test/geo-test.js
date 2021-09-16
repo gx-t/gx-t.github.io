@@ -10,6 +10,11 @@ function GeoTest() {
     var draw_layer_1 = empty_proc;
 
     main_menu = function() {
+        const items = [
+            {t:"Պահպանել", f:function() {}},
+            {t:"Փոխանցել...", f:function(geo_data) {navigator.share && navigator.share(geo_data);}},
+            {t:"Քարտեզ...", f:function(geo_data) {window.location = geo_data.url;}}
+            ];
         cs.onclick = function(e) {
             var geo_data = {
                 title: 'Geolocation data',
@@ -17,41 +22,30 @@ function GeoTest() {
                 url: "https://www.openstreetmap.org/?mlat=" + gps.coords.latitude + "&mlon=" + gps.coords.longitude + "#map=17/" + gps.coords.latitude + "/" + gps.coords.longitude,
                 };
 
-            console.log(e.clientX + " " + e.clientY + " " + cs.width + " " + cs.height);
-            if(cs.height > cs.width) {
-                if(e.clientY < cs.height / 2)
-                    return navigator.share && navigator.share(geo_data);
+            var line_height = cs.height / items.length;
+            var i;
+            for(i = 0, y = line_height; i < items.length; i ++, y += line_height) {
+                if(e.clientY < y)
+                    return items[i].f(geo_data);
             }
-            else {
-                if(e.clientX < cs.width / 2)
-                    return navigator.share && navigator.share(geo_data);
-            }
-            return window.location = geo_data.url;
         }
 
         draw_layer_1 = function() {
-            var txt_share = "Փոխանցել...";
-            var txt_map = "Քարտեզ...";
+            var line_height = cs.height / items.length;
+            var font_height = Math.min(cs.width, cs.height) / items.length / 4;
             ctx.save();
             ctx.fillStyle = "#FFFF0040";
-            ctx.strokeStyle = '#0FFFF040';
-            ctx.textBaseline = 'middle';
-            ctx.textAlign = 'center';
-            if(cs.width > cs.height) {
-                ctx.font = cs.height / 10 + 'pt Calibri';
-                ctx.fillText(txt_share, cs.width / 4, cs.height / 2); 
-                ctx.fillText(txt_map, cs.width / 4 * 3, cs.height / 2); 
+            ctx.strokeStyle = '#FFFFFF40';
+            ctx.textBaseline = 'bottom';
+            ctx.textAlign = 'left';
+            ctx.font = font_height + 'pt Calibri';
+            for(var i = 0, x = 0, y = line_height; i < items.length; i ++, x += cs.width / 4, y += line_height) {
+                if(x + ctx.measureText(items[i]).width > cs.width)
+                    x = 0;
+                ctx.fillText(items[i].t, x, y);
                 ctx.beginPath();
-                ctx.moveTo(cs.width / 2, 0);
-                ctx.lineTo(cs.width / 2, cs.height);
-                ctx.stroke();
-            } else {
-                ctx.font = cs.width / 10 + 'pt Calibri';
-                ctx.fillText(txt_share, cs.width / 2, cs.height / 4); 
-                ctx.fillText(txt_map, cs.width / 2, cs.height / 4 * 3); 
-                ctx.beginPath();
-                ctx.moveTo(0, cs.height / 2);
-                ctx.lineTo(cs.width, cs.height / 2);
+                ctx.moveTo(0, y);
+                ctx.lineTo(cs.width, y);
                 ctx.stroke();
             }
             ctx.restore();
@@ -152,7 +146,7 @@ function GeoTest() {
         ctx.fillText(Math.round(gps.coords.altitude), cs.width / 25, cs.width * 0.125); 
         ctx.textAlign = 'right';
         ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width - cs.width / 25, cs.width * 0.125); 
-        draw_coord_time(cs.width / 25, cs.height, cs.width * 0.05);
+        draw_coord_time(cs.width / 25, cs.height - cs.height / 16, cs.width * 0.05);
         var r = cs.height * 0.15;
         compass_draw_proc(cs.width - r, cs.height - r, r, 0);
     }
