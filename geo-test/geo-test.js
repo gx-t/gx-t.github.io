@@ -46,6 +46,7 @@ function GeoTest() {
                 ctx.beginPath();
                 ctx.moveTo(0, y);
                 ctx.lineTo(cs.width, y);
+                ctx.closePath();
                 ctx.stroke();
             }
             ctx.restore();
@@ -94,6 +95,7 @@ function GeoTest() {
             ctx.beginPath();
             ctx.moveTo(0, -r/1.2);
             ctx.lineTo(0, -r/1.3);
+            ctx.closePath();
             ctx.stroke();
             ctx.rotate(Math.PI / 18);
         }
