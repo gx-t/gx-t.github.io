@@ -26,23 +26,15 @@ function GeoTest() {
 
         draw_layer_0 = function() {
             ctx.fillStyle = "#00FFFFFF";
-            ctx.textBaseline = 'middle';
+            ctx.textBaseline = 'top';
             ctx.textAlign = 'left';
             ctx.clearRect(0, 0, cs.width, cs.height);
-            if(cs.width > cs.height) {
-                ctx.font = cs.height * 0.125 + 'pt Calibri';
-                ctx.fillText(Math.round(gps.coords.altitude), cs.width / 25, cs.height * 0.125); 
-                ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width / 25, cs.height * 0.325); 
-                draw_coord_time(cs.width - cs.width / 25, cs.height, cs.height * 0.05);
-                var r = cs.width * 0.15;
-                return;
-            }
-            ctx.font = cs.width * 0.125 + 'pt Calibri';
-            ctx.fillText(Math.round(gps.coords.altitude), cs.width / 25, cs.width * 0.125); 
+            var unit = Math.min(cs.width, cs.height);
+            ctx.font = unit * 0.125 + 'pt Calibri';
+            ctx.fillText(Math.round(gps.coords.altitude), cs.width / 25, 0); 
             ctx.textAlign = 'right';
-            ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width - cs.width / 25, cs.width * 0.125); 
-            draw_coord_time(cs.width - cs.width / 25, cs.height, cs.width * 0.05);
-            var r = cs.height * 0.15;
+            ctx.fillText(Math.round(3.6 * gps.coords.speed), cs.width - cs.width / 25, 0); 
+            draw_coord_time(cs.width - cs.width / 25, cs.height, unit * 0.05);
         }
 
         main_menu = function() {
