@@ -44,12 +44,7 @@ function GeoTest() {
             {t:"Քարտեզ...", f:function(geo_data) {window.location = geo_data.url;}}
             ];
             cs.onclick = function(e) {
-                var geo_data = {
-title: 'Geolocation data',
-       text: dt.toLocaleTimeString([], { hour12: false }) + " ( " + dt.toLocaleDateString() + " )\n" +  Math.round(gps.coords.altitude) + " մ\n" + Math.round(Math.round(gps.coords.speed * 3.6)) + " կմ/ժ\n" + Math.round(gps.coords.heading) + " °\n",
-       url: "https://www.openstreetmap.org/?mlat=" + gps.coords.latitude + "&mlon=" + gps.coords.longitude + "#map=17/" + gps.coords.latitude + "/" + gps.coords.longitude,
-                };
-
+                var geo_data = { title: 'Geolocation data', text: dt.toLocaleTimeString([], { hour12: false }) + " ( " + dt.toLocaleDateString() + " )\n" +  Math.round(gps.coords.altitude) + " մ\n" + Math.round(Math.round(gps.coords.speed * 3.6)) + " կմ/ժ\n" + Math.round(gps.coords.heading) + " °\n", url: "https://www.google.com/maps/place/" + gps.coords.latitude + "," + gps.coords.longitude + "/@" + gps.coords.latitude + "," + gps.coords.longitude + ",19z" };
                 var line_height = cs.height / items.length;
                 var i;
                 for(i = 0, y = line_height; i < items.length; i ++, y += line_height) {
