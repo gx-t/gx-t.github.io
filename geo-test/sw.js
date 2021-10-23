@@ -1,10 +1,9 @@
-var cache_name = "geo-test-v0.021";
+var cache_name = "geo-test-v0.022";
 
 self.addEventListener('install', (e) => {
         e.waitUntil(
                 caches.open(cache_name).then((cache) => cache.addAll([
                         'index.html',
-                        'geo-test.js',
                         'img/Globe.png',
                 ])),
                 );
