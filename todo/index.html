@@ -112,6 +112,15 @@
         uni_input.focus();
     }
 
+    function mode_move_up_onclick()
+    {
+        var prev = this.previousElementSibling;
+        if(null == prev)
+            return;
+        this.after(prev);
+        save_items();
+    }
+
     function mode_delete_onclick()
     {
         if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText))
@@ -133,6 +142,7 @@
         id_check.border     = 2;
         id_new.border       = 0;
         id_edit.border      = 0;
+        id_move_up.border   = 0;
         id_delete.border    = 0;
         set_items_onclick(mode_check_onclick);
     }
@@ -142,6 +152,7 @@
         id_check.border     = 0;
         id_new.border       = 2;
         id_edit.border      = 0;
+        id_move_up.border   = 0;
         id_delete.border    = 0;
         set_items_onclick(mode_new_onclick);
         add_item("«նոր անելիք»", 0);
@@ -153,8 +164,20 @@
         id_check.border     = 0;
         id_new.border       = 0;
         id_edit.border      = 2;
+        id_move_up.border   = 0;
+        id_move_up.border   = 0;
         id_delete.border    = 0;
         set_items_onclick(mode_edit_onclick);
+    }
+
+    function set_mode_move_up()
+    {
+        id_check.border     = 0;
+        id_new.border       = 0;
+        id_edit.border      = 0;
+        id_move_up.border   = 2;
+        id_delete.border    = 0;
+        set_items_onclick(mode_move_up_onclick);
     }
 
     function set_mode_delete()
@@ -162,6 +185,7 @@
         id_check.border     = 0;
         id_new.border       = 0;
         id_edit.border      = 0;
+        id_move_up.border   = 0;
         id_delete.border    = 2;
         set_items_onclick(mode_delete_onclick);
     }
@@ -179,9 +203,10 @@
     <div id="sp">
     </div>
     <hr>
-    <a href='javascript:set_mode_check();'  ><img src=img/check.png id="id_check"   ></a>
-    <a href='javascript:set_mode_new();'    ><img src=img/new.png id="id_new"       ></a>
-    <a href='javascript:set_mode_edit();'   ><img src=img/edit.png id="id_edit"     ></a>
-    <a href='javascript:set_mode_delete();' ><img src=img/trash.png id="id_delete"  ></a>
+    <a href='javascript:set_mode_check();'  ><img src=img/check.png id="id_check"        ></a>
+    <a href='javascript:set_mode_new();'    ><img src=img/new.png id="id_new"            ></a>
+    <a href='javascript:set_mode_edit();'   ><img src=img/edit.png id="id_edit"          ></a>
+    <a href='javascript:set_mode_move_up();'><img src=img/arrow-up.32.png id="id_move_up"></a>
+    <a href='javascript:set_mode_delete();' ><img src=img/trash.png id="id_delete"       ></a>
 </body>
 </html>
