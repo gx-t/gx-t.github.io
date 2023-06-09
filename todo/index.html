@@ -12,15 +12,18 @@
     var uni_input = document.createElement('input');
     var uni_item  = null;
 
-    function save_items() {
+    function save_items()
+    {
         var arr = document.getElementsByTagName("li");
         var todo_data = [];
         todo_data.length = arr.length;
         todo_data.fill();
-        for(var i = 0; i < arr.length; i ++) {
+        for(var i = 0; i < arr.length; i ++)
+        {
             var o = {t: arr[i].innerText, s: arr[i].state};
             todo_data[i] = o;
         }
+
         localStorage.todo_data = JSON.stringify(todo_data);
     }
 
@@ -32,18 +35,21 @@
         arr.forEach(function(el) { var item = add_item(el.t, el.s); });
     }
 
-    uni_input.onblur = function() {
-        if(0 < uni_input.value.length) {
+    uni_input.onblur = function()
+    {
+        if(0 < uni_input.value.length)
             uni_item.innerText = uni_input.value;
-        }
+
         uni_input.replaceWith(uni_item);
         setTimeout(function() { update_state(uni_item); uni_item = null; set_mode_check();}, 100);
         return false;
     }
 
-    uni_input.onkeydown = function(evt) {
+    uni_input.onkeydown = function(evt)
+    {
         if(evt.keyCode != 13)
             return;
+
         uni_input.blur();
     }
 
@@ -65,24 +71,34 @@
         }
     ];
 
-    function update_state(item) {
+    function update_state(item)
+    {
         item.state %= state_proc_arr.length;
         state_proc_arr[item.state].call(item);
         save_items();
     }
 
-    var add_item = function(text, state) {
+    var curr_id = 0;
+
+    var add_item = function(text, state)
+    {
         var item = document.createElement("li");
         item.innerText      = text;
         item.style          = "cursor:default";
         item.onselectstart  = function() { return false; };
         item.onclick        = onclick;
         item.state          = state;
+        item.draggable      = true;
+        item.ondragstart    = function(evt) { evt.dataTransfer.setData("id", evt.target.id); };
+        item.ondragover     = function(evt) { evt.preventDefault(); };
+        item.ondrop         = function(evt) { evt.preventDefault(); evt.target.after(document.getElementById(evt.dataTransfer.getData("id"))); };
+        item.id             = "ll" + curr_id ++;
         sp.appendChild(item);
         update_state(item);
     }
     
-    function mode_check_onclick() {
+    function mode_check_onclick()
+    {
         if(uni_item)
             return;
 
@@ -92,7 +108,8 @@
 
     function mode_new_onclick() {}
 
-    function mode_edit_onclick() {
+    function mode_edit_onclick()
+    {
         if(uni_item)
             return;
 
@@ -102,32 +119,35 @@
         uni_input.focus();
     }
 
-    function mode_delete_onclick() {
-        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText)) {
+    function mode_delete_onclick()
+    {
+        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText))
             this.remove();
-        }
+
         save_items();
         set_mode_check();
     }
 
-    function set_items_onclick(handler) {
+    function set_items_onclick(handler)
+    {
         var arr = document.getElementsByTagName("li");
-        for(var i = 0; i < arr.length; i ++) {
+        for(var i = 0; i < arr.length; i ++)
             arr[i].onclick = handler;
-        }
     }
 
-    function set_mode_check() {
-        id_check.border     = 1;
+    function set_mode_check()
+    {
+        id_check.border     = 2;
         id_new.border       = 0;
         id_edit.border      = 0;
         id_delete.border    = 0;
         set_items_onclick(mode_check_onclick);
     }
 
-    function set_mode_new() {
+    function set_mode_new()
+    {
         id_check.border     = 0;
-        id_new.border       = 1;
+        id_new.border       = 2;
         id_edit.border      = 0;
         id_delete.border    = 0;
         set_items_onclick(mode_new_onclick);
@@ -135,26 +155,30 @@
         set_mode_check();
     }
 
-    function set_mode_edit() {
+    function set_mode_edit()
+    {
         id_check.border     = 0;
         id_new.border       = 0;
-        id_edit.border      = 1;
+        id_edit.border      = 2;
         id_delete.border    = 0;
         set_items_onclick(mode_edit_onclick);
     }
 
-    function set_mode_delete() {
+    function set_mode_delete()
+    {
         id_check.border     = 0;
         id_new.border       = 0;
         id_edit.border      = 0;
-        id_delete.border    = 1;
+        id_delete.border    = 2;
         set_items_onclick(mode_delete_onclick);
     }
 
-    window.onload = function() {
+    window.onload = function()
+    {
         load_items();
         set_mode_check();
     }
+
 </script>
 </head>
 <body>
