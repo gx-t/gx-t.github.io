@@ -78,8 +78,6 @@
         save_items();
     }
 
-    var curr_id = 0;
-
     var add_item = function(text, state)
     {
         var item = document.createElement("li");
@@ -88,11 +86,6 @@
         item.onselectstart  = function() { return false; };
         item.onclick        = onclick;
         item.state          = state;
-        item.draggable      = true;
-        item.ondragstart    = function(evt) { evt.dataTransfer.setData("id", evt.target.id); };
-        item.ondragover     = function(evt) { evt.preventDefault(); };
-        item.ondrop         = function(evt) { evt.preventDefault(); evt.target.after(document.getElementById(evt.dataTransfer.getData("id"))); };
-        item.id             = "ll" + curr_id ++;
         sp.appendChild(item);
         update_state(item);
     }
