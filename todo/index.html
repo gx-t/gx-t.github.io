@@ -55,19 +55,19 @@
 
     var state_proc_arr = [
         function() {
-            this.innerHTML = this.innerText.normalize();
+            this.innerText = this.innerText.normalize();
         },
 
         function() {
-            this.innerHTML = this.innerText.bold();
+            this.innerText = this.innerText.bold();
         },
 
         function() {
-            this.innerHTML = this.innerText.italics();
+            this.innerText = this.innerText.italics();
         },
 
         function() {
-            this.innerHTML = this.innerText.strike();
+            this.innerText = this.innerText.strike();
         }
     ];
 
