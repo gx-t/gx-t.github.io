@@ -53,22 +53,12 @@
         uni_input.blur();
     }
 
-    var state_proc_arr = [
-        function() {
-//            this.innerText = this.innerText.normalize();
-        },
-
-        function() {
-//            this.innerText = this.innerText.bold();
-        },
-
-        function() {
-//            this.innerText = this.innerText.italics();
-        },
-
-        function() {
-//            this.innerText = this.innerText.strike();
-        }
+    var state_proc_arr =
+    [
+        function() { this.innerHTML = this.textContent.normalize(); },
+        function() { this.innerHTML = this.textContent.bold(); },
+        function() { this.innerHTML = this.textContent.italics(); },
+        function() { this.innerHTML = this.textContent.strike(); }
     ];
 
     function update_state(item)
