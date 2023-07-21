@@ -6,5 +6,9 @@ CACHE:
 /todo/img/edit.png
 /todo/img/arrow-up.32.png
 /todo/img/trash.png
+<<<<<<< HEAD
+=======
+/todo/img/todo.png
+>>>>>>> a17c9a78606640f682414ae6f9b8c5fe990969ec
 /todo/index.html
 

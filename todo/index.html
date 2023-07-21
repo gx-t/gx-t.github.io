@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="img/check.png">
+<link rel="icon" href="img/todo.png">
 <title>Անելիքներ</title>
 <script>
 
@@ -20,7 +20,7 @@
         todo_data.fill();
         for(var i = 0; i < arr.length; i ++)
         {
-            var o = {t: arr[i].innerText, s: arr[i].state};
+            var o = {t: arr[i].textContent, s: arr[i].state};
             todo_data[i] = o;
         }
 
@@ -38,7 +38,7 @@
     uni_input.onblur = function()
     {
         if(0 < uni_input.value.length)
-            uni_item.innerText = uni_input.value;
+            uni_item.textContent = uni_input.value;
 
         uni_input.replaceWith(uni_item);
         setTimeout(function() { update_state(uni_item); uni_item = null; set_mode_check();}, 100);
@@ -71,7 +71,7 @@
     var add_item = function(text, state)
     {
         var item = document.createElement("li");
-        item.innerText      = text;
+        item.textContent    = text;
         item.style          = "cursor:default";
         item.onselectstart  = function() { return false; };
         item.onclick        = onclick;
@@ -97,7 +97,7 @@
             return;
 
         uni_item = this;
-        uni_input.value = this.innerText;
+        uni_input.value = this.textContent;
         this.replaceWith(uni_input);
         uni_input.focus();
     }
@@ -113,7 +113,7 @@
 
     function mode_delete_onclick()
     {
-        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.innerText))
+        if(confirm("Հաստատեք որ ուզում եք ջնջել՝\n\n" + this.textContent))
             this.remove();
 
         save_items();
